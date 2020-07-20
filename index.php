@@ -1,3 +1,18 @@
+<?php 
+include 'functions.php';
+
+(isset($_SESSION["logged_in"])) ? $record = gdata_user($_SESSION["id_user"]) : $record = false;
+
+if(isset($_COOKIE["login"]["stat"]) && isset($_COOKIE["login"]["id_user"])){
+  $record = gdata_user(base64_decode(base64_decode($_COOKIE["login"]["id_user"])));
+  $_SESSION["logged_in"] = true;
+  $_SESSION["id_user"] = base64_decode(base64_decode($_COOKIE["login"]["id_user"]));
+} else {
+  false;
+}
+
+
+ ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,10 +81,16 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="assets/img/profile/<?= (isset($_SESSION["id_user"]) ? $record["profile_pict"] : '000-user.png'); ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+
+          <?php if (isset($_SESSION["id_user"]) && isset($_SESSION["logged_in"])) : ?>
+          <a href="#" class="d-block"><?= $record["fullname"] ?></a>
+          <?php else: ?>
+          <a href="#" class="d-block">Welcome !</a>
+          <?php endif; ?>
+
         </div>
       </div>
 
@@ -78,6 +99,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -88,12 +110,6 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Inactive Page</p>
@@ -101,21 +117,43 @@
               </li>
             </ul>
           </li>
+
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Simple Link
-                <span class="right badge badge-danger">New</span>
               </p>
             </a>
           </li>
+
+          <?php if(isset($_SESSION["logged_in"]) && isset($_SESSION["id_user"]) ) : ?>
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link">
+              <i class="nav-icon fas fa-sign-out-alt"></i>
+              <p>
+                Log Out
+              </p>
+            </a>
+          </li>
+          <?php else: ?>
+          <li class="nav-item">
+            <a href="login.php" class="nav-link">
+              <i class="nav-icon fas fa-sign-in-alt"></i>
+              <p>
+                Log In
+              </p>
+            </a>
+          </li>
+          <?php endif; ?>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
   </aside>
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -124,15 +162,59 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Starter Page</h1>
+            <h1 class="m-0 text-dark">Ini Starter Page</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item active">Ini Tanggal</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
+        
+
+        <div class="row mb-1">
+          <!-- Filter by Month -->          
+          <div class="col">
+          <sub>Filter by Month</sub> 
+            <select name="month" id="month" class="form-control">
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+
+          <!-- Filter by Year -->
+          <div class="col">
+          <sub>Filter by Year</sub> 
+            <select name="year" id="year" class="form-control">
+              <option value="2020">2020</option>
+            </select>
+          </div>
+
+          <!-- Filter by Status -->
+          <div class="col">
+          <sub>Filter by Status</sub>
+            <select name="status" id="status" class="form-control">
+              <option disabled selected value="">Filter by Status</option>
+              <option value="Not Completed">Not Completed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
+        </div>
+
+
+
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
