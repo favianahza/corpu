@@ -1,12 +1,25 @@
-/* Loading Screen */
+:root {
+	--darkblue: #0c3188;
+	--lightblue: #347bff;
+	--text: 'Montserrat';
+	--head: 'Bebas Neue';
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+
+/* LOADING SCREEN */
 #loader-wrapper {
     position: fixed;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(5,5,5,.75);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255,255,255,1);
     z-index: 1255;
-    opacity: .9;
+    opacity: .98;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,24 +29,106 @@
     width: 50px;
     height: 50px;
     border: 5px solid;
-    color: #eee1;
+    color: black;
     border-radius: 50%;
     border-top-color: transparent;
     animation: loader 1.2s linear infinite;
 }
 
+
 @keyframes loader{
     25%{
-        color: #eee2;
+        color: black;
     }
     50%{
-        color: #eee3;
+        color: grey;
     }
     75%{
-        color: #eee4;
+        color: black;
     }
     to{
         transform: rotate(360deg);
     }
 }
 /* Loading Screen */
+
+
+/* TOP SECTION */
+.top 
+{
+	height: 75vh;
+	font-family: var(--text);
+	background: url('../img/banner.jpg') rgba(1, 1, 1, .48);
+	background-blend-mode: multiply;
+	background-attachment: fixed;
+	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;	
+  	box-shadow: 1px 1px 10px;
+}
+
+
+.top .navbar-brand 
+{
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+
+.top a 
+{
+	font-size: 1.03rem;
+	color: white !important;
+}
+
+.top a.sign{
+	border: 1px solid #347bff;
+	border-radius: 3rem;
+	background-color: #347bff !important;
+}
+
+.top a.sign:hover{
+	border: 1px solid #3463ff;
+	border-radius: 3rem;
+	background-color: #3463ff !important;
+	transition: .2s;
+}
+
+.top #banner {
+	width: 88%;
+	height: 88%;
+}
+
+.top .head-1{
+	font-family: var(--head);
+	font-size: 4vmax;
+}
+
+
+
+@media (max-width: 575.98px){
+	.top {
+		height: 100vh;
+	}
+	.top .head-1{
+		font-size: 6vmax;
+	}
+}
+
+
+
+@media (min-width: 576px) and (max-width: 767.98px){
+
+}
+
+
+@media (min-width: 768px) and (max-width: 991.98px) {}
+
+
+@media (min-width: 992px) and (max-width: 1199.98px) {}
+
+
+@media (min-width: 1200px) {}
+
+
+

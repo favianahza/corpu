@@ -53,15 +53,27 @@ function login(){
 	 $_SESSION["logged_in"] = true;
 	 $_SESSION["id_user"] = $rows["id"];
 	 $_SESSION["type"] = $rows["type"];
+	 $_SESSION["activity"] = time();
 
 	 if( isset($_POST["cookie"]) ){
 	 	setcookie('login[stat]', true, time()+2*24*60*60);
 	 	setcookie('login[id_user]', base64_encode(base64_encode(strval($_SESSION["id_user"]))), time()+2*24*60*60);
 	 }
-
 	 return true;
 	
 }
+
+function session_exp(){
+	if (isset($_SESSION['activity']) && (time() - $_SESSION['activity'] > 1800)) {
+	    // last request was more than 30 minutes ago
+	    session_unset();     // unset $_SESSION variable for the run-time 
+	    session_destroy();   // destroy session data in storage
+	    header("location:../index");
+	} else {
+		$_SESSION['activity'] = time(); // update last activity time stamp
+	}
+}
+
 
 function gdata_user($ID){
 	global $connect;

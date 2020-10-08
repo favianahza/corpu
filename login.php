@@ -1,24 +1,21 @@
 <?php 
 include 'functions.php';
 
-( isset($_COOKIE["login[stat]"]) ? header("Location: index.php") : false );
+( isset($_COOKIE["login[stat]"]) ? header("location:index") : false );
 
-if( isset($_SESSION["logged_in"]) && isset($_SESSION["id_user"]) && isset($_SESSION["type"])){ header("Location: index.php"); }
+if( isset($_SESSION["logged_in"]) && isset($_SESSION["id_user"]) && isset($_SESSION["type"])){ header("Location: dashboard"); }
 
 
 if( isset($_POST["signUp"]) ) {
-    $con = (register()) ? header("Location: login.php") : false;
+    $con = (register()) ? header("location:login") : false;
 } elseif( isset($_POST["signIn"]) ) {
-    $con = (login()) ? header("Location: login.php") : false;
+    $con = (login()) ? header("location:login") : false;
 } else {
     $con = false;
 }
 
  ?>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,12 +29,16 @@ if( isset($_POST["signUp"]) ) {
     <title>Bootstrap 4 Login/Register Form</title>
 </head>
 <body>
+        <!-- Loading Screen -->
+  <div id="loader-wrapper">
+    <div id="loader"></div>
+  </div>
   <div class="row h-100">
     <div id="logreg-forms" class="my-auto">
 
         <!-- SIGNIN FORM-->        
         <form class="form-signin" method="POST">
-        <h1 class="h3 mb-4 font-weight-bold" style="text-align: center">Sign In</h1>
+        <h1 class="h3 mb-4 font-weight-bold" style="text-align: center">Login</h1>
 <!--             <h1 class="h3 mb-3 font-weight-bold" style="text-align: center"> Sign in</h1>
             <div class="social-login">
                 <button class="btn facebook-btn social-btn" type="button"><span><i class="fab fa-facebook-f"></i> Sign in with Facebook</span> </button>
@@ -52,7 +53,7 @@ if( isset($_POST["signUp"]) ) {
                 <label class="custom-control-label d-inline-block" for="cookie">Remember Me</label>
               </div>    
             </div>
-            <button class="btn btn-success btn-block" type="submit"  name="signIn"><i class="fas fa-sign-in-alt"></i> Sign in</button>
+            <button class="btn btn-success btn-block" type="submit"  name="signIn"><i class="fas fa-sign-in-alt"></i> Login </button>
             <hr>
             <!-- <p>Don't have an account!</p>  -->
             <button class="btn btn-primary btn-block" type="button" id="btn-signup"><i class="fas fa-user-plus"></i> Sign up New Account</button>
@@ -87,32 +88,11 @@ if( isset($_POST["signUp"]) ) {
                   </div>    
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" name="signUp"><i class="fas fa-user-plus"></i> Sign Up</button>
-                <button  id="cancel_signup" class="btn btn-info btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                <button  id="cancel_signup" class="btn btn-info btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
             </form>
             
     </div>
    </div>
-    <p style="text-align:center">
-        <a href="http://bit.ly/2RjWFMfunction toggleResetPswd(e){
-    e.preventDefault();
-    $('#logreg-forms .form-signin').toggle() // display:block or none
-    $('#logreg-forms .form-reset').toggle() // display:block or none
-}
-
-function toggleSignUp(e){
-    e.preventDefault();
-    $('#logreg-forms .form-signin').toggle(); // display:block or none
-    $('#logreg-forms .form-signup').toggle(); // display:block or none
-}
-
-$(()=>{
-    // Login Register Form
-    $('#logreg-forms #forgot_pswd').click(toggleResetPswd);
-    $('#logreg-forms #cancel_reset').click(toggleResetPswd);
-    $('#logreg-forms #btn-signup').click(toggleSignUp);
-    $('#logreg-forms #cancel_signup').click(toggleSignUp);
-})g" target="_blank" style="color:black"></a>
-    </p>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="assets/js/login.js"></script>

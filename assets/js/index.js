@@ -1,5 +1,4 @@
-$(document).ready(function(){
-
-	$("#loader-wrapper").fadeOut(750);
+$(window).on("load", function(){
+	$("#loader-wrapper").fadeOut(750);	
 
 });
