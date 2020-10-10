@@ -1,5 +1,17 @@
-$(window).ready(function(){
+	let counter = false;
 
-	$("#loader-wrapper").fadeOut(750);
-	
+	// AJAX CALL
+	function ajax(content){	
+		if( counter && $('#CONTENT').children().data('loaded') == content ){
+		 alert('loaded');	
+		 return;
+		}
+		$('#CONTENT').children().remove();
+		$('#CONTENT').load(content);
+		counter = true;
+	}
+
+
+$(function(){
+	$("#loader-wrapper").fadeOut(750);	
 });

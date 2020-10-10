@@ -4,14 +4,15 @@ include '../functions.php';
 
 if (isset($_SESSION["logged_in"])) {
   if(isset($_COOKIE["login"]["stat"]) && isset($_COOKIE["login"]["id_user"])){
-    $record = gdata_user(base64_decode(base64_decode($_COOKIE["login"]["id_user"])));
+    $record = gdata_user(base64_decode(base64_decode($_COOKIE["login"]["id_user"])), base64_decode(base64_decode($_COOKIE["login"]["type"]        )));
     $_SESSION["logged_in"] = true;
     $_SESSION["id_user"] = base64_decode(base64_decode($_COOKIE["login"]["id_user"]));
   } else {
     false;
   }
   session_exp();
-  $record = gdata_user($_SESSION["id_user"]);
+  $record = ["fullname" => $data["fullname"], "username" => $data["username"], "profile_pict" => $data["profile_pict"], "type" => $data["type"], "current_task" => $data["current_task"], "completed_task" => $data["completed_task"], "" => $data["total_task"]];
+  $_SESSION[""]
 
 } else {
   header("location:../index");
@@ -31,6 +32,16 @@ if (isset($_SESSION["logged_in"])) {
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- REQUIRED SCRIPTS -->
+
+  <!-- jQuery -->
+  <script src="plugins/jquery/jquery.min.js"></script>
+  <!-- Bootstrap 4 -->
+  <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- AdminLTE App -->
+  <script src="dist/js/adminlte.min.js"></script>
+  <!-- Custom Script -->
+  <script src="../assets/js/dashboard.js" async></script>  
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -43,7 +54,7 @@ if (isset($_SESSION["logged_in"])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="#main" class="nav-link" onclick="ajax('main.php')">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -70,7 +81,7 @@ if (isset($_SESSION["logged_in"])) {
   </div>
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link text-center">
       <span class="brand-text font-weight-light">TACACS</span>
@@ -102,24 +113,37 @@ if (isset($_SESSION["logged_in"])) {
 
           <li class="nav-item has-treeview menu-open">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <i class="nav-icon fas fa-tasks"></i>
               <p>
-                Starter Pages
+                Task
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
+                <a href="#AvailableTask" class="nav-link" onclick="ajax('available_task.php');">
+                  <i class="fas fa-plus-circle nav-icon"></i>
+                  <p>Available Task</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
+                  <i class="fas fas fa-info-circle nav-icon"></i>
+                  <p>Current Task</p>
+                </a>
+              </li>              
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-check-circle nav-icon"></i>
+                  <p>Completed Task</p>
                 </a>
               </li>
             </ul>
           </li>
+          
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="#Profile" class="nav-link" onclick="ajax('profile.php');">
               <i class="nav-icon fas fa-user-circle"></i>
               <p>
                 Profile
@@ -157,132 +181,7 @@ if (isset($_SESSION["logged_in"])) {
   <!-- CONTENT -->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="CONTENT">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Ini Starter Page</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active">Ini Tanggal</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-        
 
-        <div class="row mb-1">
-          <!-- Filter by Month -->          
-          <div class="col">
-          <sub>Filter by Month</sub> 
-            <select name="month" id="month" class="form-control">
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </div>
-
-          <!-- Filter by Year -->
-          <div class="col">
-          <sub>Filter by Year</sub> 
-            <select name="year" id="year" class="form-control">
-              <option value="2020">2020</option>
-            </select>
-          </div>
-
-          <!-- Filter by Status -->
-          <div class="col">
-          <sub>Filter by Status</sub>
-            <select name="status" id="status" class="form-control">
-              <option disabled selected value="">Filter by Status</option>
-              <option value="Not Completed">Not Completed</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-
-        </div>
-
-
-
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <div class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up the bulk of the card's
-                  content.
-                </p>
-                <a href="#" class="card-link">Card link</a>
-                <a href="#" class="card-link">Another link</a>
-              </div>
-            </div><!-- /.card -->
-          </div>
-          <!-- /.col-md-6 -->
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-
-            <div class="card card-primary card-outline">
-              <div class="card-header">
-                <h5 class="m-0">Featured</h5>
-              </div>
-              <div class="card-body">
-                <h6 class="card-title">Special title treatment</h6>
-
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <!-- /.col-md-6 -->
-        </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
@@ -305,17 +204,7 @@ if (isset($_SESSION["logged_in"])) {
     <strong>This Dashboard provided by <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
   </footer>
 </div>
+</div>
 <!-- ./wrapper -->
-
-<!-- REQUIRED SCRIPTS -->
-
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-<!-- Custom Script -->
-<script src="../assets/js/dashboard.js"></script>
 </body>
 </html>

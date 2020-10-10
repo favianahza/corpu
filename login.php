@@ -68,19 +68,16 @@ if( isset($_POST["signUp"]) ) {
             <!-- SIGNUP FORM-->
             <form class="form-signup" method="POST">
               <h1 class="h3 mb-4 font-weight-bold" style="text-align: center;">Sign Up</h1>
-<!--            <div class="social-login">
-                    <button class="btn facebook-btn social-btn" type="button"><span><i class="fab fa-facebook-f"></i> Sign up with Facebook</span> </button>
-                </div>
-                <div class="social-login">
-                    <button class="btn google-btn social-btn" type="button"><span><i class="fab fa-google-plus-g"></i> Sign up with Google+</span> </button>
-                </div>
-                
-                <p style="text-align:center">OR</p> -->
-
-                <input type="text" id="full-name" name="fullname" class="form-control" placeholder="Full name" required="" autofocus="" autocomplete="off">
-                <input type="text" id="user-name" name="username" class="form-control" placeholder="Username" required autofocus="" autocomplete="off">
-                <input type="password" id="user-pass" name="pass" class="form-control" placeholder="Password" required autofocus="" autocomplete="off">
-                <input type="password" id="user-repeatpass" name="cpass" class="form-control" placeholder="Repeat Password" required autofocus="" autocomplete="off">
+                <input type="text" id="full-name" name="fullname" class="form-control mb-3" placeholder="Full name" required="" autofocus="" autocomplete="off" required>
+                <input type="text" id="user-name" name="username" class="form-control mb-3" placeholder="Username" required autofocus="" autocomplete="off" required>
+                <input type="password" id="user-pass" name="pass" class="form-control mb-3" placeholder="Password" required autofocus="" autocomplete="off" required minlength="1">
+                <input type="password" id="user-repeatpass" name="cpass" class="form-control" placeholder="Repeat Password" required autofocus="" autocomplete="off" minlength="1">
+                <small id="pass" class="form-text text-muted">Minimum Password Length is 7 Character.</small>
+                <select class="form-control mt-3" id="utype" name="utype" required>
+                  <option disabled selected>Tipe User</option>
+                  <option value="1">Client</option>
+                  <option value="2">Teknisi</option>
+                </select>
                 <div class="row text-center mt-2 mx-auto">
                   <div class="custom-control custom-checkbox">
                     <input class="custom-control-input d-inline-block" type="checkbox" id="show" name="show">
@@ -88,7 +85,8 @@ if( isset($_POST["signUp"]) ) {
                   </div>    
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" name="signUp"><i class="fas fa-user-plus"></i> Sign Up</button>
-                <button  id="cancel_signup" class="btn btn-info btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+                <button  id="cancel_signup" class="btn btn-info btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                <button class="btn btn-primary btn-block google-btn border-danger" type="button"><span><i class="fab fa-google-plus-g"></i> Sign up with Google+</span> </button>
             </form>
             
     </div>
