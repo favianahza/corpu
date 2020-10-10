@@ -11,8 +11,6 @@ if (isset($_SESSION["logged_in"])) {
     false;
   }
   session_exp();
-  $record = ["fullname" => $data["fullname"], "username" => $data["username"], "profile_pict" => $data["profile_pict"], "type" => $data["type"], "current_task" => $data["current_task"], "completed_task" => $data["completed_task"], "" => $data["total_task"]];
-  $_SESSION[""]
 
 } else {
   header("location:../index");
@@ -27,7 +25,7 @@ if (isset($_SESSION["logged_in"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Web Corpu</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/bs4/css/bootstrap.css">
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
@@ -92,12 +90,12 @@ if (isset($_SESSION["logged_in"])) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../assets/img/profile/<?= (isset($_SESSION["id_user"]) ? $record["profile_pict"] : '000-user.png'); ?>" class="img-circle elevation-2" alt="User Image">
+          <img src="../assets/img/profile/<?= (isset($_SESSION["id_user"]) ? $_SESSION["profile_pict"] : '000-user.png'); ?>" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
 
           <?php if (isset($_SESSION["id_user"]) && isset($_SESSION["logged_in"])) : ?>
-          <a href="#" class="d-block"><?= $record["fullname"] ?></a>
+          <a href="#" class="d-block"><?= $_SESSION["fullname"] ?></a>
           <?php else: ?>
           <a href="#" class="d-block">Welcome !</a>
           <?php endif; ?>
@@ -179,6 +177,9 @@ if (isset($_SESSION["logged_in"])) {
   </aside>
 
   <!-- CONTENT -->
+  <div id="content-loader-wrapper">
+    <div id="content-loader"></div>
+  </div>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="CONTENT">
 

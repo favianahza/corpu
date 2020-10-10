@@ -1,5 +1,5 @@
 /* LOADING SCREEN */
-#loader-wrapper {
+#content-loader-wrapper {
     position: fixed;
     top: 0;
     width: 100vw;
@@ -12,7 +12,7 @@
     justify-content: center;
 }
 
-#loader {
+#content-loader {
     width: 50px;
     height: 50px;
     border: 5px solid;
