@@ -25,7 +25,7 @@ if (isset($_SESSION["logged_in"])) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Web Corpu</title>
-  <link rel="stylesheet" href="assets/bs4/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/bs4/css/bootstrap.css">
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
@@ -52,24 +52,12 @@ if (isset($_SESSION["logged_in"])) {
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#main" class="nav-link" onclick="ajax('main.php')">Home</a>
+        <a href="#main" class="nav-link" onclick="ajax('main.php')">Change Password</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Change Profile Pict</a>
       </li>
     </ul>
-
-    <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
-      <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-        <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
   </nav>
   <!-- /.navbar -->
 
@@ -125,13 +113,13 @@ if (isset($_SESSION["logged_in"])) {
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#CurrentTask" class="nav-link" onclick="ajax('current_task.php');">
                   <i class="fas fas fa-info-circle nav-icon"></i>
                   <p>Current Task</p>
                 </a>
               </li>              
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#CompletedTask" class="nav-link"  onclick="ajax('completed_task.php');">
                   <i class="fas fa-check-circle nav-icon"></i>
                   <p>Completed Task</p>
                 </a>
@@ -177,11 +165,11 @@ if (isset($_SESSION["logged_in"])) {
   </aside>
 
   <!-- CONTENT -->
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" id="CONTENT">
   <div id="content-loader-wrapper">
     <div id="content-loader"></div>
   </div>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper" id="CONTENT">
 
   </div>
   <!-- /.content-wrapper -->

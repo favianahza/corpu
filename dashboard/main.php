@@ -17,6 +17,17 @@ session_start();
         
 
         <div class="row mb-1">
+          <!-- Filter by Day -->
+          <div class="col">
+          <sup>Filter by Day</sub>
+            <select name="status" id="status" class="form-control">
+              <option disabled selected value="">Filter by Day</option>
+              <option value="Not Completed">Not Completed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+
           <!-- Filter by Month -->          
           <div class="col">
           <sup>Filter by Month</sup>
@@ -41,17 +52,6 @@ session_start();
           <sup>Filter by Year</sup>
             <select name="year" id="year" class="form-control">
               <option value="2020">2020</option>
-            </select>
-          </div>
-
-          <!-- Filter by Status -->
-          <div class="col">
-          <sup>Filter by Status</sub>
-            <select name="status" id="status" class="form-control">
-              <option disabled selected value="">Filter by Status</option>
-              <option value="Not Completed">Not Completed</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Completed">Completed</option>
             </select>
           </div>
 

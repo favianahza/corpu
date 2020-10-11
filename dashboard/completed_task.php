@@ -2,11 +2,11 @@
 session_start();
  ?>
     <!-- Content Header (Page header) -->
-    <div class="content-header" data-loaded="available_task.php">
+    <div class="content-header" data-loaded="completed_task.php">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Available Task</h1>
+            <h1 class="m-0 text-dark">Completed Task</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@ session_start();
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title"><span class="badge badge-primary">Available Task</span></h3>
+                <h3 class="card-title"><span class="badge badge-success">Completed Task</span></h3>
 
                 <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 150px;">

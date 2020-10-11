@@ -2,6 +2,8 @@
 session_start();
 $connect = mysqli_connect('localhost', 'root', '', 'corpu');
 
+
+// REGISTER USER
 function register(){
 	global $connect;
 	$fullname = htmlspecialchars(mysqli_real_escape_string($connect, $_POST["fullname"]));
@@ -35,6 +37,8 @@ function register(){
 	return mysqli_affected_rows($connect);
 }
 
+
+// LOGIN USER
 function login(){
 	global $connect;
 	
@@ -78,6 +82,8 @@ function login(){
 	
 }
 
+
+// SESSION EXPIRATION
 function session_exp(){
 	if (isset($_SESSION['activity']) && (time() - $_SESSION['activity'] > 1800)) {
 	    // last request was more than 30 minutes ago
@@ -90,6 +96,8 @@ function session_exp(){
 }
 
 
+
+// GET DATA USER
 function gdata_user($ID, $type){
 	global $connect;
 	if( $type == 2 ) {

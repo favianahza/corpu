@@ -14,4 +14,5 @@
 
 $(function(){
 	$("#loader-wrapper").fadeOut(750);	
+	$("#content-loader-wrapper").fadeOut(750);	
 });
