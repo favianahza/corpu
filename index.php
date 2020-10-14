@@ -27,9 +27,6 @@
               <a class="nav-link px-md-4" href="#">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link px-md-4" href="#">List</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link px-md-4" href="login">Login</a>
             </li>
             <li class="nav-item pl-md-3">

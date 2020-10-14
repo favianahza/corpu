@@ -1,7 +1,7 @@
 <?php 
 session_start();
 $connect = mysqli_connect('localhost', 'root', '', 'corpu');
-
+date_default_timezone_set('Asia/Jakarta');
 
 // REGISTER USER
 function register(){
@@ -27,13 +27,13 @@ function register(){
 
 	// 1 = CLIENT, 2 = TEKNISI
 	($_POST["utype"] == 1) ? $type = 1 : $type = 2;
-	
+
 	$query = "INSERT INTO t_user VALUES ('', '$fullname', '$username', '$hashed', DEFAULT, $type)";
 	(mysqli_query($connect, $query)) ? $last_id = mysqli_insert_id($connect) : exit;
-
-	($type == 1) ? $n_query = "" : $n_query = "INSERT INTO t_teknisi VALUES('$last_id', '$fullname', DEFAULT, DEFAULT, DEFAULT)";
+ 
+	($type == 1) ? $n_query = "INSERT INTO t_client VALUES('', '$fullname', DEFAULT, DEFAULT, $last_id)" : 
+	$n_query = "INSERT INTO t_teknisi VALUES('', '$fullname', DEFAULT, DEFAULT, DEFAULT, $last_id)";
 	var_dump(mysqli_query($connect, $n_query) or die(mysqli_error($connect)));
-
 	return mysqli_affected_rows($connect);
 }
 
@@ -68,16 +68,25 @@ function login(){
 	 $_SESSION["username"] = $record['username'];
 	 $_SESSION["profile_pict"] = $record['profile_pict'];
 	 $_SESSION["acc_type"] = $record['type'];
+
+	 // Client Specific Information
+	 if( $_SESSION["type"] == 1 ){
+	 $_SESSION["issued_task"] = $record["issued_task"];
+	 $_SESSION["completed_issued_task"] = $record["completed_issued_task"];
+	 }
+
+	 // Technician Specific Information
+	 if( $_SESSION["type"] == 2 ){
 	 $_SESSION["current_task"] = $record['current_task'];
 	 $_SESSION["completed_task"] = $record['completed_task'];
 	 $_SESSION["total_task"] = $record['total_task'];
+	 }
 
 	 if( isset($_POST["cookie"]) ){
 	 	setcookie('login[stat]', true, time()+2*24*60*60);
 	 	setcookie('login[id_user]', base64_encode(base64_encode(strval($_SESSION["id_user"]))), time()+2*24*60*60);
 	 	setcookie('login[type]', base64_encode(base64_encode(strval($_SESSION["type"]))), time()+2*24*60*60);
 	 }
-
 	 return true;
 	
 }
@@ -85,8 +94,8 @@ function login(){
 
 // SESSION EXPIRATION
 function session_exp(){
-	if (isset($_SESSION['activity']) && (time() - $_SESSION['activity'] > 1800)) {
-	    // last request was more than 30 minutes ago
+	if (isset($_SESSION['activity']) && (time() - $_SESSION['activity'] > 3600)) {
+	    // last request was more than 60 minutes ago
 	    session_unset();     // unset $_SESSION variable for the run-time 
 	    session_destroy();   // destroy session data in storage
 	    header("location:../index");
@@ -100,12 +109,17 @@ function session_exp(){
 // GET DATA USER
 function gdata_user($ID, $type){
 	global $connect;
+	if( $type == 1 ) {
+	$query = "SELECT fullname, username, profile_pict,  (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS issued_task, (SELECT completed_issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS completed_issued_task  FROM t_user WHERE id = $ID;";
+	$result = mysqli_query($connect, $query);
+	}
+
 	if( $type == 2 ) {
 	$query = "SELECT fullname, username, profile_pict, (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT current_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS current_task, (SELECT completed_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS completed_task, (SELECT total_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS total_task FROM t_user WHERE id = $ID";
 
-	$rest = mysqli_query($connect, $query);		
-	}
-	return mysqli_fetch_assoc($rest);
+	$result = mysqli_query($connect, $query);
+	} 
+	return mysqli_fetch_assoc($result);
 }
 
 
