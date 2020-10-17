@@ -2,10 +2,10 @@
 
 	// AJAX CALL
 	function ajax(content){	
-		if( counter && $('#CONTENT').children().data('loaded') == content ){
-		 alert('loaded');	
-		 return;
-		}
+		// if( counter && $('#CONTENT').children().data('loaded') == content ){
+		//  alert('loaded');	
+		//  return;
+		// }
 		$('#CONTENT').children().remove();
 
 		$.ajax({
@@ -179,7 +179,10 @@ $("#edit_pp").click(function(){
 					  result.Success,
 					  'success'
 					);
-					$('.img-circle.elevation-2').attr("src", "../assets/img/profile/"+result.ImageName);
+					$('img#miniProfile').attr("src", "../assets/img/profile/"+result.ImageName);
+					if( $('#YourProfile').length > 0 ){
+						$('#YourProfile').attr('src', '../assets/img/profile/'+result.ImageName);
+					}
 					$('#changePP').modal('hide');
 					$('#changePP #password_pp').val('');
 					$('#changePP #foto').val('');

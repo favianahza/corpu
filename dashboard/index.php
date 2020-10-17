@@ -53,12 +53,6 @@ if (isset($_SESSION["logged_in"])) {
       <li class="nav-item">
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#ChangePassword" class="nav-link" data-toggle="modal" data-target="#changeAP">Change Password</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link" data-toggle="modal" data-target="#changePP">Change Profile Pict</a>
-      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -82,7 +76,7 @@ if (isset($_SESSION["logged_in"])) {
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../assets/img/profile/<?= (isset($_SESSION["id_user"]) ? $_SESSION["profile_pict"] : '000-user.png'); ?>" class="img-circle elevation-2" alt="User Image" style="border-radius: 50%;">
+          <img src="../assets/img/profile/<?= (isset($_SESSION["id_user"]) ? $_SESSION["profile_pict"] : '000-user.png'); ?>" alt="User Image" style="border-radius: 50%; height: 35px; width: 35px;" id="miniProfile">
         </div>
         <div class="info">
 
@@ -145,7 +139,7 @@ if (isset($_SESSION["logged_in"])) {
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="#CreateTask" class="nav-link" onclick="ajax('client_create_task.php');">
-                  <i class="fas fa-edit nav-icon"></i>
+                  <i class="fas fa-file-alt nav-icon"></i>
                   <p>Create Task</p>
                 </a>
               </li>              
@@ -173,7 +167,22 @@ if (isset($_SESSION["logged_in"])) {
               </p>
             </a>
           </li>
-
+          <li class="nav-item">
+            <a href="#ChangePassword" class="nav-link" data-toggle="modal" data-target="#changeAP">
+              <i class="nav-icon fas fa-key"></i>
+              <p>
+                Change Password
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" data-toggle="modal" data-target="#changePP">
+              <i class="nav-icon fas fa-user-edit"></i>
+              <p>
+                Change Profile Pict
+              </p>
+            </a>
+          </li>                    
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
@@ -226,7 +235,7 @@ if (isset($_SESSION["logged_in"])) {
         <div class="row">
           <div class="col col-md-8 offset-md-2">
               <form>
-                <center><img src="../assets/img/profile/<?= $_SESSION["profile_pict"] ?>" class="shadow" style=" border-radius: 50%; width: 175px; height: 175px;"></center>
+                <center><img src="../assets/img/profile/<?= $_SESSION["profile_pict"] ?>" class="shadow" style=" border-radius: 50%; width: 175px; height: 175px;" id="YourProfile"></center>
                 <div class="form-group">
                   <label for="fullname">Fullname</label>
                   <input class="form-control" id="fullname" disabled value="<?= $_SESSION["fullname"] ?>">
@@ -384,17 +393,17 @@ if (isset($_SESSION["logged_in"])) {
         <form method="POST">
 
         <div class="form-group">
-            <label for="Password" class="col-form-label">Enter your New Password</label>
+            <label for="Password" class="col-form-label">Masukan Password Baru</label>
             <input class="form-control" type="password" id="new_password_ep" name="password" required placeholder="Masukan Password Baru" autocomplete="off">
         </div>
 
         <div class="form-group">
-            <label for="KPassword" class="col-form-label">Confirm your New Password</label>
+            <label for="KPassword" class="col-form-label">Masukan kembali Password Baru</label>
             <input class="form-control" type="password" id="c_password_ep" name="kpassword" required placeholder="Masukan Konfirmasi Password Baru" autocomplete="off">
         </div>
 
         <div class="form-group">
-            <label for="KPassword" class="col-form-label">Insert your Old Password</label>
+            <label for="KPassword" class="col-form-label">Masukan Password Lama</label>
             <input class="form-control" type="password" id="o_password_ep" name="opassword" required placeholder="Masukan Password Lama" autocomplete="off">
         </div>
 
@@ -459,6 +468,5 @@ if (isset($_SESSION["logged_in"])) {
     </div>
   </div>
 </div>
-
 </body>
 </html>

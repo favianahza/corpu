@@ -1,8 +1,12 @@
 <?php 
-session_start();
+require_once '../functions.php';
+
+$id_teknisi = $_GET["id"];
+
+
  ?>
     <!-- Content Header (Page header) -->
-    <div class="content-header" data-loaded="profile.php">
+    <div class="content-header" data-loaded="profile_teknisi.php?id=<?=$id_teknisi; ?>">
       <div class="container px-5">
         <div class="row">
           <div class="col text-center">
@@ -29,23 +33,9 @@ session_start();
                   <label for="">Account Type</label>
                   <input class="form-control" id="" disabled value="<?= $_SESSION["acc_type"] ?>">
                 </div>
-                <!-- <div class="row">
-                  <div class="form-group col-md-4">
-                    <label for="">Current Task</label>
-                    <input class="form-control" id="" disabled value="">
-                  </div>
-                  <div class="form-group col-md-4">
-                    <label for="">Completed Task</label>
-                    <input class="form-control" id="" disabled value="">
-                  </div>
-                  <div class="form-group col-md-4">
-                    <label for="">Total Task</label>
-                    <input class="form-control" id="" disabled value="">
-                  </div> -->
-
                   <div class="row">
                     <!-- /.col -->
-                    <?php if($_SESSION["type"] == 2):?>
+                    <?php if(isset($id_teknisi)):?>
 
                     <div class="col-12">
                       <div class="info-box mb-3">
@@ -84,38 +74,6 @@ session_start();
                         <div class="info-box-content">
                           <span class="info-box-text">Total Task</span>
                           <span class="info-box-number"><?= $_SESSION["total_task"] ?></span>
-                        </div>
-                        <!-- /.info-box-content -->
-                      </div>
-                      <!-- /.info-box -->
-                    </div>
-                    <!-- /.col -->
-                    <?php elseif($_SESSION["type"] == 1): ?>
-
-                    <div class="col-12">
-                      <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
-
-                        <div class="info-box-content">
-                          <span class="info-box-text">Issued Task</span>
-                          <span class="info-box-number"><?= $_SESSION["issued_task"] ?></span>
-                        </div>
-                        <!-- /.info-box-content -->
-                      </div>
-                      <!-- /.info-box -->
-                    </div>
-                    <!-- /.col -->
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-
-                    <div class="col-12">
-                      <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
-
-                        <div class="info-box-content">
-                          <span class="info-box-text">Completed Task</span>
-                          <span class="info-box-number"><?= $_SESSION["completed_issued_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>

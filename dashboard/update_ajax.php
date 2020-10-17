@@ -1,5 +1,5 @@
 <?php 
-include '../functions.php';
+require_once '../functions.php';
 // Changing Password
 if( isset($_POST["old_pass"]) && isset($_POST["conf_pass"]) && isset($_POST["new_pass"]) ){
 
@@ -19,6 +19,7 @@ if( isset($_POST["old_pass"]) && isset($_POST["conf_pass"]) && isset($_POST["new
 
 	$updated_pass = password_hash($new_pass, PASSWORD_DEFAULT);
 
+	// Update the Password
 	$result = mysqli_query($connect, "UPDATE t_user SET password = '$updated_pass' WHERE id = $id") or die(mysqli_error($connect)); 
 	if( $result ){
 		mysqli_close($connect);
