@@ -55,11 +55,14 @@ session_start();
                 </div>
               </div>
 
-
-              <div class="form-group">
-                <label for="taskImg">Upload Foto</label>
-                <input type="file" class="form-control" id="taskImg" name="taskImg[]" multiple accept="image/*">
-                <small class="form-text text-muted">Upload Foto yang menggambarkan kondisi saat ini, sebelum Teknisi datang memperbaiki / menyelesaikan komplain.</small>
+              <div class="row">
+                <div class="col">
+                  <div class="form-group">
+                    <label for="taskImg">Upload Foto</label>
+                      <input type="file" class="form-control" id="taskImg" name="taskImg[]" multiple accept="image/*">
+                    <small class="form-text text-muted">Upload Foto yang menggambarkan kondisi saat ini, sebelum Teknisi datang memperbaiki / menyelesaikan komplain.</small>
+                  </div>
+                </div>
               </div>
 
               <div class="d-flex justify-content-around flex-wrap" id="imgPreview">
@@ -113,13 +116,13 @@ session_start();
         form.append('lokasi', lokasi);
         form.append('deskripsi', deskripsi);
         form.append('tipe', tipe);
-        if(tipe == "team"){
+        if(tipe == "Team"){
           form.append('member',$('#member').val());
         } else {
           form.append('member',1);
         }
         form.append('submit', 'submit');
-
+        form.append('id_client', <?= $_SESSION['id_client']; ?>);
         // Send FormData to Backend
         $.ajax({
             url: 'create_task_ajax.php',
@@ -128,7 +131,7 @@ session_start();
             contentType: false,
             processData: false,
             success: function(response){
-              console.log(response);
+              // return console.log(response); // FOR DEBUGGING
               let result = JSON.parse(response);
               if( 'Success' in result ){
                 // Success create Task
@@ -137,6 +140,7 @@ session_start();
                   result.Success,
                   'success'
                 );
+                ajax('client_issued_task.php')
               } else if('Alert' in result ){
                 Swal.fire(
                   'Gagal !',

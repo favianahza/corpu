@@ -2,16 +2,17 @@
 require_once '../functions.php';
 
 if(isset($_POST["submit"])){
-	//exit(json_encode(["count"=>count($_FILES)]));
+	// exit(json_encode(["debug"=>date('Y-m-d')]));
 
 	// Uploading one file
 	if(count($_FILES) == 1) {
+		$id_client = $_POST['id_client'];
 		$id = $_SESSION["id_user"];
 		$file_name = $_FILES["file0"]["name"];
 		$tmp_name = $_FILES["file0"]["tmp_name"];
 		$error = $_FILES["file0"]["error"];
 		$file_size = $_FILES["file0"]["size"];
-
+		$tgl = date('Y-m-d');
 		// Check if user uploading an Image
 		if( $error == 4 ){
 			exit(json_encode(["Alert"=>"Anda tidak mengupload gambar !"]));
@@ -38,7 +39,7 @@ if(isset($_POST["submit"])){
 		$member = htmlspecialchars(mysqli_real_escape_string($connect, $_POST["member"]));
 
 		// Insert data to t_task table
-		$query = "INSERT INTO t_task VALUES('', '$taskName', '$lokasi', '$deskripsi', DEFAULT, '$id', DEFAULT, '$tipe', '$member')";
+		$query = "INSERT INTO t_task VALUES('', '$taskName', '$lokasi', '$deskripsi', DEFAULT, '$id', DEFAULT, '$tipe', '$member',DEFAULT, '$tgl')";
 		
 
 		(mysqli_query($connect, $query)) ? $task_id = mysqli_insert_id($connect) : die(mysqli_error($connect));
@@ -51,6 +52,9 @@ if(isset($_POST["submit"])){
 		// Insert Task Image
 		$result = mysqli_query($connect, "INSERT INTO `t_task_img` VALUES('', '$newfile', '$task_id')") or die(mysqli_error($connect)); 
 
+		// Update Client Issued Task in t_client
+		mysqli_query($connect, "UPDATE t_client SET issued_task = issued_task + 1 WHERE id_client = $id_client");
+
 		exit(json_encode(["Success"=>"Berhasil membuat Task !"]));
 
 	}
@@ -60,6 +64,7 @@ if(isset($_POST["submit"])){
 	else {
 		// ID and Array Initialization
 		$id = $_SESSION["id_user"];
+		$id_client = $_POST['id_client'];
 		$file_name = []; $tmp_name = []; $error = []; $file_size = []; $newfile = [];
 
 		// Used for make sure that Task only inserted to table one time
@@ -102,7 +107,7 @@ if(isset($_POST["submit"])){
 			$member = htmlspecialchars(mysqli_real_escape_string($connect, $_POST["member"]));
 
 			// Insert data to t_task table
-			$query = "INSERT INTO t_task VALUES('', '$taskName', '$lokasi', '$deskripsi', DEFAULT, '$id', DEFAULT, '$tipe', '$member')";
+			$query = "INSERT INTO t_task VALUES('', '$taskName', '$lokasi', '$deskripsi', DEFAULT, '$id', DEFAULT, '$tipe', '$member', DEFAULT, '$tgl')";
 			(mysqli_query($connect, $query)) ? $task_id = mysqli_insert_id($connect) : die(mysqli_error($connect));
 			} else {
 				NULL;
@@ -117,7 +122,7 @@ if(isset($_POST["submit"])){
 			// Insert Task Image
 			$result = mysqli_query($connect, "INSERT INTO `t_task_img` VALUES('', '$newfile[$i]', '$task_id')") or die(mysqli_error($connect)); 
 		}
-
+		mysqli_query($connect, "UPDATE t_client SET issued_task = issued_task + 1 WHERE id_client = $id_client");
 		exit(json_encode(["Success"=>"Berhasil membuat Task !"]));
 
 	}

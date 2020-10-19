@@ -3,12 +3,10 @@ require_once '../functions.php';
 $records = gAll_AvailableTask($_SESSION["id_teknisi"]);
 $return = "available_task.php";
 
-// var_dump($records); exit();
-
  ?>
     <!-- Content Header (Page header) -->
-    <section class="content-header" data-loaded="available_task.php"> <!-- /.section content-header start -->
-      <div class="container-fluid"> <!-- /.container-fluid start -->
+    <div class="content-header" data-loaded="available_task.php">
+      <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0 text-dark">Available Task</h1>
@@ -19,21 +17,22 @@ $return = "available_task.php";
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
-      </div><!-- /.container-fluid end -->
-    </section> <!-- /.section content-header end -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
 
     <!-- Main content -->
-    <section class="content"> <!-- /.section content start -->
+    <div class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header"> <!-- /.card-header start -->
+              <div class="card-header">
                 <h3 class="card-title"><span class="badge badge-primary">Available Task</span></h3>
-              </div> <!-- /.card-header end -->
-              
-              <div class="card-body"> <!-- /.card-body start-->
-                <table id="data" class="table table-bordered table-striped">
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive">
+                <table id="data" class="table table-hover table-striped">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -41,7 +40,6 @@ $return = "available_task.php";
                       <th>Lokasi</th>
                       <th>Pengaju</th>
                       <th>Tipe</th>
-                      <th>Anggota yang dibutuhkan</th>
                       <th>Lainnya</th>
                     </tr>
                   </thead>
@@ -65,8 +63,6 @@ $return = "available_task.php";
                         <?php endif; ?>
                       </th>
 
-                      <th><?= $record['technician_needed']; ?></th>
-
                       <th><h5>
                         <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>')">DETAIL</span>
 
@@ -77,16 +73,14 @@ $return = "available_task.php";
                     <?php endforeach; ?>
                   </tbody>
                 </table>
-              </div> <!-- /.card-body end-->
-              
-            </div>
+              </div>
+              <!-- /.card-body -->
+            </div> <!-- /.card -->            
           </div>
-          <!-- /.col -->
         </div>
         <!-- /.row -->
-      </div>
-      <!-- /.container-fluid -->
-    </section> <!-- /.section content-header end -->
+      </div><!-- /.container-fluid -->
+    </div>
     <!-- /.content -->
     <script>
       $("#data").DataTable({
@@ -100,7 +94,8 @@ $return = "available_task.php";
         var IdTask = $(this).data('id');
         var id_teknisi = $(this).data('teknisi');
         Swal.fire({
-          text: 'Ingin mengambil pekerjaan ini ?',
+          title: 'Yakin ?',
+          text: "Ingin mengerjakan tugas ini ?",
           icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#28a745',
@@ -120,16 +115,18 @@ $return = "available_task.php";
                 let response = JSON.parse(data);
                 if( 'Failed' in response ){
                     // Failed to Delete Task
-                    Swal.fire({
-                      title:'Gagal !',
-                      icon:'error'
-                    });
+                    Swal.fire(
+                      'Gagal !',
+                      result.Failed,
+                      'error'
+                    );
                 } else {
                     // Success to Delete Task
-                    Swal.fire({
-                      title:'Berhasil !',
-                      icon:'success'
-                    });
+                    Swal.fire(
+                      'Berhasil !',
+                      result.Success,
+                      'success'
+                    );
                     ajax('available_task.php');
                 }
               });

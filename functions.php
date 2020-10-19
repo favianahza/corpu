@@ -40,6 +40,9 @@ function register(){
 }
 
 
+
+
+
 // LOGIN USER
 function login(){
 	global $connect;
@@ -59,13 +62,11 @@ function login(){
 		return false;
 	 }
 
-	 $_SESSION["logged_in"] = true;
-	 $_SESSION["id_user"] = $rows["id"];
-	 $_SESSION["type"] = $rows["type"];
-	 $_SESSION["activity"] = time();
-
 	 // Get User Information
+	 $_SESSION["id_user"] = $rows["id"];
+	 $_SESSION["type"] = $rows["type"];	 
 	 $record = gdata_user($_SESSION["id_user"], $_SESSION["type"]);
+
 	 $_SESSION["fullname"] = $record['fullname'];
 	 $_SESSION["username"] = $record['username'];
 	 $_SESSION["profile_pict"] = $record['profile_pict'];
@@ -75,6 +76,7 @@ function login(){
 	 if( $_SESSION["type"] == 1 ){
 	 $_SESSION["issued_task"] = $record["issued_task"];
 	 $_SESSION["completed_issued_task"] = $record["completed_issued_task"];
+	 $_SESSION['id_client'] = $record['id_client'];
 	 }
 
 	 // Technician Specific Information
@@ -82,7 +84,11 @@ function login(){
 	 $_SESSION["current_task"] = $record['current_task'];
 	 $_SESSION["completed_task"] = $record['completed_task'];
 	 $_SESSION["total_task"] = $record['total_task'];
+	 $_SESSION["id_teknisi"] = $record['id_teknisi'];
 	 }
+
+	 $_SESSION["logged_in"] = true;
+	 $_SESSION["activity"] = time();
 
 	 if( isset($_POST["cookie"]) ){
 	 	setcookie('login[stat]', true, time()+2*24*60*60);
@@ -92,6 +98,9 @@ function login(){
 	 return true;
 	
 }
+
+
+
 
 
 // SESSION EXPIRATION
@@ -108,19 +117,21 @@ function session_exp(){
 
 
 
+
+
 // GET DATA USER
 function gdata_user($ID, $type){
 	global $connect;
 
-	// Get Technician Data
+	// Get Client Data
 	if( $type == 1 ) {
-	$query = "SELECT fullname, username, profile_pict,  (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS issued_task, (SELECT completed_issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS completed_issued_task  FROM t_user WHERE id = $ID;";
+	$query = "SELECT (SELECT id_client FROM t_client WHERE t_client.t_user_id = t_user.id) AS id_client, fullname, username, profile_pict,  (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS issued_task, (SELECT completed_issued_task FROM t_client WHERE t_client.t_user_id = t_user.id) AS completed_issued_task  FROM t_user WHERE id = $ID;";
 	$result = mysqli_query($connect, $query);
 	}
 
-	// Get Client Data
+	// Get Technician Data
 	if( $type == 2 ) {
-	$query = "SELECT fullname, username, profile_pict, (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT current_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS current_task, (SELECT completed_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS completed_task, (SELECT total_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS total_task FROM t_user WHERE id = $ID";
+	$query = "SELECT (SELECT id_teknisi FROM t_teknisi WHERE t_user_id = t_user.id) AS id_teknisi, fullname, username, profile_pict, (SELECT description FROM t_utype WHERE t_user.type = t_utype.type) AS type, (SELECT current_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS current_task, (SELECT completed_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS completed_task, (SELECT total_task FROM t_teknisi WHERE t_user.fullname = t_teknisi.fullname) AS total_task FROM t_user WHERE id = $ID";
 
 	$result = mysqli_query($connect, $query);
 	}
@@ -129,11 +140,14 @@ function gdata_user($ID, $type){
 }
 
 
-// GET TASK
+
+
+
+// GET TASK CREATED BY SPECIFIC USER
 function gtask_user($ID){
 	global $connect;
 	$records = [];
-	$query = " SELECT *, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi  FROM t_task;";
+	$query = " SELECT *, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE issuer_id = $ID";
 	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
 	while( $record = mysqli_fetch_assoc($result) ){
 		$records[] = $record;
@@ -142,18 +156,47 @@ function gtask_user($ID){
 }
 
 
+
+
+
 // GET TASK DETAIL
-function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1){
+function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_dibutuhkan=1){
 	global $connect;
 
-	if( $total_img == 1 ){
+	if( $total_teknisi == 1 && $teknisi_yang_dibutuhkan == 1 && $total_img == 1){ // Individual Task with Single Image
+		// var_dump('DEBUG'); exit();
 		$query =  "SELECT *, (SELECT img_name FROM t_task_img WHERE id_task = $ID_TASK) AS foto0, (SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
 
 		$result = mysqli_query($connect, $query);
 		return mysqli_fetch_assoc($result);
 	}
 
-	else {
+	else if($total_teknisi == 1 && $teknisi_yang_dibutuhkan == 1 && $total_img > 1 ) {// Individual Task with Multiple Image
+		// Get all Images related to the task
+		$result = mysqli_query($connect, "SELECT img_name FROM t_task_img WHERE id_task = $ID_TASK") or die(mysqli_query($connect));
+
+		// Fetch Images data
+		$images = [];
+		while($image = mysqli_fetch_assoc($result)){
+			$images[] = $image;
+		}
+
+		// Get all detail about Task
+		$query = "SELECT *, (SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
+
+		$task = mysqli_query($connect, $query) or die(mysqli_error($connect));
+		$result = mysqli_fetch_assoc($task);
+
+
+		// Appending Images Data to the result A.K.A. Insert $images to the $result as index foto[i]
+		for($i = 0; $i < $total_img; $i++){
+			$result["foto"][$i] = $images[$i]["img_name"];
+		}
+
+		return $result;
+	} 
+
+	else { // Team Task with Single or Multiple Image
 
 		// Get all detail about Task
 		$getTask = mysqli_query($connect, "SELECT * FROM t_task WHERE id_task = $ID_TASK") or die(mysqli_error($connect));
@@ -167,21 +210,30 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1){
 		while( $record = mysqli_fetch_assoc($getImg) ){
 			$images[] = $record;
 		}
-		
-		// Insert Images to Result Variables
-		$foto = [];
-		for( $i = 0; $i < $total_img; $i++ ){
-			$result["foto"][$i] = $images[$i]["img_name"];
+
+		// Count Images
+		if( count($images) == 1 ){
+			// For single Images
+			$result["foto0"] = $images[0]["img_name"];
+		} else {
+			// For multiple Images
+			// Insert Images to Result Variables
+			$foto = [];
+			for( $i = 0; $i < $total_img; $i++ ){
+				$result["foto"][$i] = $images[$i]["img_name"];
+			}			
 		}
+
+
 
 		// Get Teknisi that related to the Task
 		$list_id_teknisi = explode("+", $result["technician_id"]);
+
 
 		$workers = [];
 		for($i = 0; $i < $total_teknisi; $i++){
 		$getWorkers = mysqli_query($connect, "SELECT fullname AS nama_teknisi_".$i." , id_teknisi AS id_teknisi".$i.",t_user_id, (SELECT profile_pict FROM t_user WHERE id = t_user_id) AS profile_pict".$i." FROM t_teknisi WHERE id_teknisi=$list_id_teknisi[$i]");
 		$workers[] = mysqli_fetch_assoc($getWorkers);
-
 		}
 
 		// Insert Workers to Result Variables
@@ -196,5 +248,22 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1){
 
 }
 
+
+
+
+
+// GET ALL AVAILABLE TASK
+function gAll_AvailableTask($ID){
+	global $connect;
+	$records = [];
+	$query = "SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi, member - active_member AS technician_needed FROM t_task WHERE status = 'NOT COMPLETED' AND member != active_member AND technician_id NOT LIKE '%$ID%' OR technician_id IS NULL;";
+	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
+
+	while( $record = mysqli_fetch_assoc($result) ){
+		$records[] = $record;
+	}
+
+	return $records;
+}
 
  ?>

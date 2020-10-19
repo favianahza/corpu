@@ -1,0 +1,119 @@
+DELETE FROM t_task;
+DELETE FROM t_user;
+ALTER TABLE t_user AUTO_INCREMENT = 1;
+ALTER TABLE t_client AUTO_INCREMENT = 1;
+ALTER TABLE t_teknisi AUTO_INCREMENT = 1;
+ALTER TABLE t_task AUTO_INCREMENT = 1;
+ALTER TABLE t_task_img AUTO_INCREMENT = 1;
+
+
+(SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi
+
+SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE status = 'NOT COMPLETED';
+
+INSTR(technician_id, '2')
+
+SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE status = 'NOT COMPLETED' AND member != active_member AND technician_id NOT LIKE '%2%' OR technician_id IS NULL
+
+
+
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Taskname</th>
+                      <th>Lokasi</th>
+                      <th>Pengaju</th>
+                      <th>Tipe</th>
+                      <th>Lainnya</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php $i = 1; ?>
+                    <?php foreach($records as $record) : ?>
+                    <tr class="task_<?= $record["id_task"]; ?>">
+                      <th><?= $i++; ?></th>
+
+                      <th><?= $record["taskname"] ?></th>
+
+                      <th><?= $record["location"] ?></th>
+
+                      <th><?= $record["pengaju"] ?></th>
+
+                      <th>
+                        <?php if($record["type"] == 'Team'):?>
+                          <i class="fas fa-user-friends"></i> <?= $record["type"] ?>
+                        <?php else: ?>
+                          <i class="fas fa-user-alt"></i> <?= $record["type"] ?>
+                        <?php endif; ?>
+                      </th>
+
+                      <th><h5>
+                        <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>')">DETAIL</span>
+
+                        <span class="badge badge-success" style="cursor: pointer;" data-type="<?= $record["type"] ?>" data-member="<?= $record["member"]?>" data-active="<?= $record["active_member"] ?>" id="take" data-id="<?= $record["id_task"] ?>" data-teknisi="<?= $_SESSION["id_teknisi"]; ?>">AMBIL</span>
+                      </h5></th>
+
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+                <div class="card-footer clearfix">
+                  <ul class="pagination pagination-sm m-0 float-right">
+                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                  </ul>
+                </div>
+              </div>
+
+
+
+
+                <table id="data" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>No.</th>
+                      <th>Taskname</th>
+                      <th>Lokasi</th>
+                      <th>Pengaju</th>
+                      <th>Tipe</th>
+                      <th>Lainnya</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php $i = 1; ?>
+                    <?php foreach($records as $record) : ?>
+                    <tr class="task_<?= $record["id_task"]; ?>">
+                      <th><?= $i++; ?></th>
+
+                      <th><?= $record["taskname"] ?></th>
+
+                      <th><?= $record["location"] ?></th>
+
+                      <th><?= $record["pengaju"] ?></th>
+
+                      <th>
+                        <?php if($record["type"] == 'Team'):?>
+                          <i class="fas fa-user-friends"></i> <?= $record["type"] ?>
+                        <?php else: ?>
+                          <i class="fas fa-user-alt"></i> <?= $record["type"] ?>
+                        <?php endif; ?>
+                      </th>
+
+                      <th><h5>
+                        <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>')">DETAIL</span>
+
+                        <span class="badge badge-success" style="cursor: pointer;" data-type="<?= $record["type"] ?>" data-member="<?= $record["member"]?>" data-active="<?= $record["active_member"] ?>" id="take" data-id="<?= $record["id_task"] ?>" data-teknisi="<?= $_SESSION["id_teknisi"]; ?>">AMBIL</span>
+                      </h5></th>
+
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+
+
+SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE status = 'NOT COMPLETED' AND member != active_member AND technician_id NOT LIKE '%1%' OR technician_id IS NULL;

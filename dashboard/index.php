@@ -29,6 +29,8 @@ if (isset($_SESSION["logged_in"])) {
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <link rel="stylesheet" href="../assets/css/dashboard.css">
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">  
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- REQUIRED SCRIPTS -->
 
@@ -42,6 +44,11 @@ if (isset($_SESSION["logged_in"])) {
   <script src="../assets/js/dashboard.js" async></script>  
   <!-- Sweet Alert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <!-- DataTables -->
+  <script src="plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+  <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+  <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -65,7 +72,7 @@ if (isset($_SESSION["logged_in"])) {
   </div>
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4 position-fixed">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link text-center">
       <span class="brand-text font-weight-light">TACACS</span>
@@ -364,15 +371,6 @@ if (isset($_SESSION["logged_in"])) {
     </div>
   </aside>
   <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="float-right d-none d-sm-inline">
-    </div>
-    <!-- Default to the left -->
-    <strong>This Dashboard provided by <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
-  </footer>
 </div>
 </div>
 <!-- ./wrapper -->
@@ -424,6 +422,8 @@ if (isset($_SESSION["logged_in"])) {
 </div>
 
 
+
+
 <!-- MODAL CHANGE PROFILE PICT -->
 <div class="modal fade" id="changePP" tabindex="-1" role="dialog" aria-labelledby="changeProfilePict" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -442,8 +442,8 @@ if (isset($_SESSION["logged_in"])) {
           <div class="col">
             <div class="form-group text-center font-weight-bolder">
               <img src="../assets/img/profile/<?=  $_SESSION['profile_pict'] ?>" id="preview-img" onclick="triggerClick();" class="cursor-pointer rounded-circle shadow" width="150" height="150" style="cursor: pointer;"><br><br>
-              <label for="foto" class="cursor-pointer">Foto</label>
-              <input type="file" name="foto" id="foto" class="form-control" style="display: none;" onchange="preview(this);" required>
+              <label for="profilePicture" class="cursor-pointer">Foto</label>
+              <input type="file" name="profilePicture" id="profilePicture" class="form-control" style="display: none;" onchange="preview(this);" required>
             </div>
           </div>
         </div>    

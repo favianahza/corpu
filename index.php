@@ -8,11 +8,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat&display=swap" rel="stylesheet"> 
   <link rel="stylesheet" href="dashboard/plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="assets/css/index.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
 </head>
 <body>
     <!-- Loading Screen -->
   <div id="loader-wrapper">
-    <div id="loader"></div>
+      <div class="loadingio-spinner-dual-ring-gjphf0oxhqk"><div class="ldio-fcb261hinsm">
+      <div></div><div><div></div></div>
+      </div></div>
   </div>
 
   <section class="top container-fluid mb-4">

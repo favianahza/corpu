@@ -29,9 +29,12 @@ if( isset($_POST["signUp"]) ) {
     <title>Bootstrap 4 Login/Register Form</title>
 </head>
 <body>
-        <!-- Loading Screen -->
+
+  <!-- Loading Screen -->
   <div id="loader-wrapper">
-    <div id="loader"></div>
+    <div class="loadingio-spinner-pulse-xb8bvblk92e"><div class="ldio-bujfm3460jd">
+    <div></div><div></div><div></div>
+    </div></div>
   </div>
   <div class="row h-100">
     <div id="logreg-forms" class="my-auto">

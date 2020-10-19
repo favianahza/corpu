@@ -1,6 +1,13 @@
-	let counter = false;
+	// LOADING SCREEN
+	$(window).on("load", function(){
+		$("#loader-wrapper").fadeOut(750);	
+		$("#content-loader-wrapper").fadeOut(750);	
+	});
+	
 
 	// AJAX CALL
+	let counter = false;
+
 	function ajax(content){	
 		// if( counter && $('#CONTENT').children().data('loaded') == content ){
 		//  alert('loaded');	
@@ -12,7 +19,7 @@
 			 url: content,
     		 type: 'GET',
 			 beforeSend: function(){			 	
-			 	$('#CONTENT').append('<div id="content-loader-wrapper"></div>');
+			 	$('#CONTENT').append('<div id="content-loader-wrapper">WOWOWOWO</div>');
  			 }, 			
 			 success: function(response){
 			 	$('#CONTENT').fadeOut(200, function() {			 		
@@ -85,7 +92,7 @@
 
     // PREVIEW PICT
     function triggerClick() {
-      document.getElementById('foto').click();
+      document.getElementById('profilePicture').click();
     }
 
     function preview(e) {
@@ -141,10 +148,10 @@ $(document).on("click", "#edit_pass", function() {
 
 
 // UPDATE PROFILE PICT
-$("#edit_pp").click(function(){
+$(document).on("click","#edit_pp", function(){
 
         var fd = new FormData();
-        var files = $('#foto')[0].files[0];
+        var files = $('#profilePicture')[0].files[0];
         var password = $('#password_pp').val();
         fd.append('file',files);
         fd.append('pass',password);
@@ -189,7 +196,7 @@ $("#edit_pp").click(function(){
 				}
             },
         });
-    });
+});
 
 
 // $(document).on("click", "#edit_pp", function() {
@@ -224,8 +231,3 @@ $("#edit_pp").click(function(){
 // 		}
 // 	});
 // }); 
-
-$(function(){
-	$("#loader-wrapper").fadeOut(750);	
-	$("#content-loader-wrapper").fadeOut(750);	
-});    
