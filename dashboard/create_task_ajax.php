@@ -2,7 +2,12 @@
 require_once '../functions.php';
 
 if(isset($_POST["submit"])){
-	// exit(json_encode(["debug"=>date('Y-m-d')]));
+
+	// exit(json_encode(["debug"=>var_dump(($_POST["member"]))])); // DEBUGGING
+
+	// If client not uploading 
+	(count($_FILES) == 0) ? exit(json_encode(["Alert"=>"Anda tidak mengupload gambar !"])) : True ;
+
 
 	// Uploading one file
 	if(count($_FILES) == 1) {
@@ -38,6 +43,8 @@ if(isset($_POST["submit"])){
 		$tipe = htmlspecialchars(mysqli_real_escape_string($connect, $_POST["tipe"]));
 		$member = htmlspecialchars(mysqli_real_escape_string($connect, $_POST["member"]));
 
+		( ($taskName && $lokasi && $deskripsi) == "" ) ? exit(json_encode(["Alert"=>"Isi form dengan lengkap !"])) : True ;
+
 		// Insert data to t_task table
 		$query = "INSERT INTO t_task VALUES('', '$taskName', '$lokasi', '$deskripsi', DEFAULT, '$id', DEFAULT, '$tipe', '$member',DEFAULT, '$tgl')";
 		
@@ -66,7 +73,7 @@ if(isset($_POST["submit"])){
 		$id = $_SESSION["id_user"];
 		$id_client = $_POST['id_client'];
 		$file_name = []; $tmp_name = []; $error = []; $file_size = []; $newfile = [];
-
+		$tgl = date('Y-m-d');
 		// Used for make sure that Task only inserted to table one time
 		$counter = 0;
 

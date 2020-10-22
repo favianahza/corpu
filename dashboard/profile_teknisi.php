@@ -3,10 +3,10 @@ require_once '../functions.php';
 
 $id_teknisi = $_GET["id"];
 $img = $_GET["img"];
+$return = $_GET["return"];
 $query = "SELECT fullname, current_task, completed_task, total_task FROM t_teknisi WHERE id_teknisi = $id_teknisi";
 $result = mysqli_query($connect, $query) or die(mysqli_error($connect));
 $teknisi = mysqli_fetch_assoc($result);
-$return = ($_SESSION["type"] == 1) ? 'client_issued_task.php' : 'available_task.php' ;
 
  ?>
     <!-- Content Header (Page header) -->

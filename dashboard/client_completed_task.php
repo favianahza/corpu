@@ -1,17 +1,17 @@
 <?php 
 require_once '../functions.php';
-$records = gAll_CurrentTask($_SESSION["id_teknisi"]);
-$return = "current_task.php";
+$records = gtask_user_complete($_SESSION["id_user"]);
+$return = "client_completed_task.php";
 
 // var_dump($records); exit(); // DEBUGGING
 
  ?>
-    <!-- Content Header (Page header) -->
-    <section class="content-header" data-loaded="current_task.php"> <!-- /.section content-header start -->
+   <!-- Content Header (Page header) -->
+    <section class="content-header" data-loaded="completed_task.php"> <!-- /.section content-header start -->
       <div class="container-fluid"> <!-- /.container-fluid start -->
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Current Task</h1>
+            <h1 class="m-0 text-dark">Completed Task</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -29,7 +29,7 @@ $return = "current_task.php";
           <div class="col-12">
             <div class="card">
               <div class="card-header"> <!-- /.card-header start -->
-                <h3 class="card-title"><span class="badge badge-warning">Current Task</span></h3>
+                <h3 class="card-title"><span class="badge badge-success">Completed Task</span></h3>
               </div> <!-- /.card-header end -->
               
               <div class="card-body"> <!-- /.card-body start-->
@@ -38,7 +38,7 @@ $return = "current_task.php";
                     <tr>
                       <th>No.</th>
                       <th>Taskname</th>
-                      <th>Pengaju</th>
+                      <th>Lokasi</th>
                       <th>Tipe</th>
                       <th>Anggota</th>
                       <th>Tanggal</th>
@@ -53,7 +53,7 @@ $return = "current_task.php";
 
                       <th><?= $record["taskname"] ?></th>
 
-                      <th><?= $record["pengaju"] ?></th>
+                      <th><?= $record["location"] ?></th>
 
                       <th>
                         <?php if($record["type"] == 'Team'):?>
@@ -72,14 +72,9 @@ $return = "current_task.php";
                         <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>&teknisi_yang_dibutuhkan=<?= $record['member'] ?>')">DETAIL</span>
                         </h5>
                         <h5>
-                        <span class="badge badge-danger" style="cursor: pointer;" data-tipetask="<?= $record["type"] ?>" data-member="<?= $record["member"]?>" data-active="<?= $record["active_member"] ?>" id="delete-<?= $record["id_task"]?>" data-id="<?= $record["id_task"] ?>" data-teknisi="<?= $_SESSION["id_teknisi"]; ?>">HAPUS</span>
+                        <span class="badge badge-success" style="cursor: pointer;" onclick="ajax('completed_task_report.php?return=<?= $return ?>&id=<?= $record["id_task"] ?>&total_img=<?= $record["total_img"]; ?>')">LAPORAN</span>
                         </h5>
-                        <?php if($record["member"] == $record["active_member"]) : ?>
-                        <h5>
-                        <span class="badge badge-success" style="cursor: pointer;" onclick="ajax('teknisi_complete_task.php?id=<?= $record["id_task"] ?>&issuer_id=<?= $record["issuer_id"]; ?>')" >SELESAI</span>
-                        </h5>
-                        <?php endif; ?>
-                      </th>
+                    </th>
 
                     </tr>
                     <?php endforeach; ?>
@@ -101,45 +96,5 @@ $return = "current_task.php";
         "responsive": true,
         "autoWidth": false,
       });
-      $('span[id*=delete-]').on('click', function(){
-        Swal.fire({
-          text: 'Ingin menghapus pekerjaan ini ?',
-          icon: 'error',
-          showCancelButton: true,
-          confirmButtonColor: '#dc3545',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Hapus'
-        }).then((result) => {
 
-          if (result.value){
-              $.post("teknisi_delete_task.php", {
-                id_task: $(this).data('id'),
-                type : $(this).data('tipetask'),
-                member :$(this).data('member'),
-                active : $(this).data('active'),
-                id_teknisi: $(this).data('teknisi')
-              }).done(function(data){              
-                return console.log(data); // DEBUGGING
-                let response = JSON.parse(data);
-                if( 'Failed' in response ){
-                    // Failed to Delete Task
-                    Swal.fire({
-                      title:'Gagal !',
-                      icon:'error'
-                    });
-                } else {
-                    // Success to Delete Task
-                    Swal.fire({
-                      title:'Berhasil !',
-                      icon:'success'
-                    });
-                    ajax('current_task.php');
-                }
-              });
-
-          }
-
-        }); // Then 
-
-      });      
     </script>

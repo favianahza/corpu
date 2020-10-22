@@ -1,5 +1,7 @@
 <?php 
-session_start();
+require_once '../functions.php';
+( isset($_SESSION["id_teknisi"])) ? $record = gdata_user($_SESSION["id_user"], $_SESSION["type"]) : NULL ;
+( isset($_SESSION["id_client"])) ? $record = gdata_user($_SESSION["id_user"], $_SESSION["type"]) : NULL ;
  ?>
     <!-- Content Header (Page header) -->
     <div class="content-header" data-loaded="profile.php">
@@ -53,7 +55,7 @@ session_start();
 
                         <div class="info-box-content">
                           <span class="info-box-text">Current Task</span>
-                          <span class="info-box-number"><?= $_SESSION["current_task"] ?></span>
+                          <span class="info-box-number"><?= $record["current_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>
@@ -70,7 +72,7 @@ session_start();
 
                         <div class="info-box-content">
                           <span class="info-box-text">Completed Task</span>
-                          <span class="info-box-number"><?= $_SESSION["completed_task"] ?></span>
+                          <span class="info-box-number"><?= $record["completed_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>
@@ -83,7 +85,7 @@ session_start();
 
                         <div class="info-box-content">
                           <span class="info-box-text">Total Task</span>
-                          <span class="info-box-number"><?= $_SESSION["total_task"] ?></span>
+                          <span class="info-box-number"><?= $record["total_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>
@@ -98,7 +100,7 @@ session_start();
 
                         <div class="info-box-content">
                           <span class="info-box-text">Issued Task</span>
-                          <span class="info-box-number"><?= $_SESSION["issued_task"] ?></span>
+                          <span class="info-box-number"><?= $record["issued_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>
@@ -115,7 +117,7 @@ session_start();
 
                         <div class="info-box-content">
                           <span class="info-box-text">Completed Task</span>
-                          <span class="info-box-number"><?= $_SESSION["completed_issued_task"] ?></span>
+                          <span class="info-box-number"><?= $record["completed_issued_task"] ?></span>
                         </div>
                         <!-- /.info-box-content -->
                       </div>

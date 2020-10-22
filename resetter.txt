@@ -117,3 +117,5 @@ SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT
 
 
 SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE status = 'NOT COMPLETED' AND member != active_member AND technician_id NOT LIKE '%1%' OR technician_id IS NULL;
+
+UPDATE t_task SET technician_id = REPLACE(technician_id, '3+', ''), active_member = active_member - 1 WHERE id_task = 16;

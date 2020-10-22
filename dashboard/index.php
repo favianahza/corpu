@@ -469,4 +469,7 @@ if (isset($_SESSION["logged_in"])) {
   </div>
 </div>
 </body>
+<script>
+  
+</script>
 </html>

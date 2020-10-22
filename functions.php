@@ -147,9 +147,35 @@ function gdata_user($ID, $type){
 function gtask_user($ID){
 	global $connect;
 	$records = [];
-	$query = " SELECT *, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE issuer_id = $ID";
-	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
+	$query = " SELECT *, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE issuer_id = $ID AND (status = 'NOT COMPLETED' OR status='IN PROGRESS')";
+	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));	
+
+	// Appending Record to Records
 	while( $record = mysqli_fetch_assoc($result) ){
+		$timestamp = strtotime($record["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$record["new_date"] = $new_date;
+		$records[] = $record;
+	}
+	return $records;
+}
+
+
+
+
+
+// GET COMPLETED TASK FROM CLIENT PERSPECTIVE
+function gtask_user_complete($ID){
+	global $connect;
+	$records = [];
+	$query = " SELECT *, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi FROM t_task WHERE issuer_id = $ID AND status = 'COMPLETED';";
+	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));	
+
+	// Appending Record to Records
+	while( $record = mysqli_fetch_assoc($result) ){
+		$timestamp = strtotime($record["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$record["new_date"] = $new_date;
 		$records[] = $record;
 	}
 	return $records;
@@ -165,13 +191,21 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_
 
 	if( $total_teknisi == 1 && $teknisi_yang_dibutuhkan == 1 && $total_img == 1){ // Individual Task with Single Image
 		// var_dump('DEBUG'); exit();
-		$query =  "SELECT *, (SELECT img_name FROM t_task_img WHERE id_task = $ID_TASK) AS foto0, (SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
+		$query =  "SELECT *, (SELECT fullname FROM t_user WHERE t_task.issuer_id = t_user.id) AS pengaju ,(SELECT img_name FROM t_task_img WHERE id_task = $ID_TASK) AS foto0, (SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
 
-		$result = mysqli_query($connect, $query);
-		return mysqli_fetch_assoc($result);
+		$fetch = mysqli_query($connect, $query);
+
+		// New Date format
+		$result = mysqli_fetch_assoc($fetch);
+		$timestamp = strtotime($result["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$result["new_date"] = $new_date;
+		return $result;
 	}
 
 	else if($total_teknisi == 1 && $teknisi_yang_dibutuhkan == 1 && $total_img > 1 ) {// Individual Task with Multiple Image
+		// var_dump('DEBUG'); exit();
+
 		// Get all Images related to the task
 		$result = mysqli_query($connect, "SELECT img_name FROM t_task_img WHERE id_task = $ID_TASK") or die(mysqli_query($connect));
 
@@ -182,7 +216,7 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_
 		}
 
 		// Get all detail about Task
-		$query = "SELECT *, (SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
+		$query = "SELECT *, (SELECT fullname FROM t_user WHERE t_task.issuer_id = t_user.id) AS pengaju,(SELECT fullname FROM t_user WHERE t_task.issuer_id = t_user.id) AS pengaju,(SELECT fullname FROM t_teknisi WHERE id_teknisi = technician_id) AS nama_teknisi, (SELECT t_teknisi.t_user_id FROM t_teknisi WHERE id_teknisi = technician_id) AS id_user_teknisi,(SELECT profile_pict FROM t_user WHERE id = id_user_teknisi) AS img_teknisi FROM t_task WHERE id_task = $ID_TASK";
 
 		$task = mysqli_query($connect, $query) or die(mysqli_error($connect));
 		$result = mysqli_fetch_assoc($task);
@@ -193,13 +227,19 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_
 			$result["foto"][$i] = $images[$i]["img_name"];
 		}
 
+
+		// New Date format
+		$timestamp = strtotime($result["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$result["new_date"] = $new_date;
 		return $result;
 	} 
 
 	else { // Team Task with Single or Multiple Image
+		// var_dump('DEBUG'); exit();
 
 		// Get all detail about Task
-		$getTask = mysqli_query($connect, "SELECT * FROM t_task WHERE id_task = $ID_TASK") or die(mysqli_error($connect));
+		$getTask = mysqli_query($connect, "SELECT *, (SELECT fullname FROM t_user WHERE t_task.issuer_id = t_user.id) AS pengaju FROM t_task WHERE id_task = $ID_TASK") or die(mysqli_error($connect));
 
 		$result = mysqli_fetch_assoc($getTask);
 		
@@ -242,7 +282,11 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_
 			$result["img_teknisi"][$i] = $workers[$i]["profile_pict".$i];
 			$result["id_teknisi"][$i] = $workers[$i]["id_teknisi".$i];
 		}
-		
+
+		// New Date format
+		$timestamp = strtotime($result["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$result["new_date"] = $new_date;
 		return $result;
 	}
 
@@ -252,18 +296,116 @@ function gtask_detail($ID_TASK=1, $total_img=1, $total_teknisi=1, $teknisi_yang_
 
 
 
-// GET ALL AVAILABLE TASK
+// GET ALL AVAILABLE TASK (FOR TECHNICIAN)
 function gAll_AvailableTask($ID){
 	global $connect;
 	$records = [];
 	$query = "SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi, member - active_member AS technician_needed FROM t_task WHERE status = 'NOT COMPLETED' AND member != active_member AND technician_id NOT LIKE '%$ID%' OR technician_id IS NULL;";
 	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
 
-	while( $record = mysqli_fetch_assoc($result) ){
+	while( $record = mysqli_fetch_assoc($result) ){		
+		$timestamp = strtotime($record["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$record["new_date"] = $new_date;
 		$records[] = $record;
 	}
 
 	return $records;
+}
+
+
+
+
+
+// GET ALL CURRENT TASK (FOR TECHNICIAN)
+function gAll_CurrentTask($ID){
+	global $connect;
+	$records = [];
+	$query = "SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi, member - active_member AS technician_needed FROM t_task WHERE INSTR(technician_id, '$ID')  AND (status = 'IN PROGRESS' OR status = 'NOT COMPLETED');";
+	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
+
+	while( $record = mysqli_fetch_assoc($result) ){		
+		$timestamp = strtotime($record["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$record["new_date"] = $new_date;
+		$records[] = $record;
+	}
+
+	return $records;
+
+}
+
+
+
+
+
+// GET ALL COMPLETED TASK (FOR TECHNICIAN)
+function gAll_CompletedTask($ID){
+	global $connect;
+	$records = [];
+	$query = "SELECT *, (SELECT fullname FROM t_user WHERE issuer_id = id) AS pengaju, (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi, member - active_member AS technician_needed FROM t_task WHERE INSTR(technician_id, '$ID') AND status = 'COMPLETED';";
+	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
+
+	while( $record = mysqli_fetch_assoc($result) ){		
+		$timestamp = strtotime($record["tanggal"]);
+		$new_date = date("d-m-Y", $timestamp);
+		$record["new_date"] = $new_date;
+		$records[] = $record;
+	}
+
+	return $records;
+
+}
+
+
+
+
+
+// CEK TASK BY ID
+function gtask_by_id($ID=1){
+	global $connect;
+	$query = "SELECT * FROM t_task WHERE id_task = $ID";
+	$fetch = mysqli_query($connect, $query);
+	$result = mysqli_fetch_assoc($fetch);
+	return $result;
+}
+
+
+
+
+
+// GET ALL RESPONSE TASK
+function gtask_response($ID_TASK=1){
+	global $connect;
+
+	// GET TOTAL RESPONSE IMAGES
+	$query = "SELECT COUNT(img_name) AS total_response_img FROM t_response_img INNER JOIN t_response USING (id_response) WHERE id_task = $ID_TASK";
+	$total_img = mysqli_fetch_assoc(mysqli_query($connect, $query))["total_response_img"];
+
+	// var_dump($responseImage); exit();
+
+	if( $total_img == 1 ){
+	// If response image is 1
+		$query = "SELECT *, (SELECT img_name FROM t_response_img WHERE t_response_img.id_response=t_response.id_response) AS foto0 FROM t_response WHERE id_task = $ID_TASK";
+		$result = mysqli_fetch_assoc(mysqli_query($connect, $query));
+		return $result;
+
+	} else {
+	// If response has multiple images
+
+		// Get all information about Response
+		$result = mysqli_fetch_assoc(mysqli_query($connect, "SELECT * FROM t_response WHERE id_task = $ID_TASK"));
+		$id_response = $result["id_response"];
+
+		// Get all images information that related to Respons
+		$getImg = mysqli_query($connect, "SELECT img_name FROM t_response_img WHERE id_response = $id_response");
+		while($image = mysqli_fetch_assoc($getImg)["img_name"]){
+			$result["foto"][] = $image; 
+		}
+		return $result;
+
+	}
+
 }
 
  ?>

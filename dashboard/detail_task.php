@@ -12,7 +12,8 @@ $return = $_GET["return"];
 $teknisi_yang_dibutuhkan = (isset($_GET['teknisi_yang_dibutuhkan'])) ? $_GET['teknisi_yang_dibutuhkan'] : NULL ;
 $result = gtask_detail($id,$total_img,$jml_teknisi, $teknisi_yang_dibutuhkan);
 
-// var_dump($total_img); exit(); // DEBUGGING
+// var_dump($result); exit(); // DEBUGGING
+
  ?>
 
     <div class="content-master">
@@ -25,10 +26,29 @@ $result = gtask_detail($id,$total_img,$jml_teknisi, $teknisi_yang_dibutuhkan);
             <h5><span class="badge badge-secondary" onclick="ajax('<?= $return; ?>')" style="cursor: pointer;">Kembali ke halaman sebelumnya</span></h5>
           </div><!-- /.col -->
           <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item active"><?= date('d/m/Y') ?></li>
-            </ol>
+            <div class="row align-content-center">
+              <div class="col">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item active">Tanggal Dibuat : <?= $result["new_date"] ?></li>
+                </ol>
+              </div>  
+            </div>
+            <div class="row align-content-center">
+              <div class="col">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item active">Pembuat Task : <?= $result["pengaju"] ?></li>
+                </ol>
+              </div>  
+            </div>
+            <div class="row align-content-center">
+              <div class="col">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item active">Jumlah Anggota Saat Ini : <?= $result["active_member"] ?></li>
+                </ol>
+              </div>  
+            </div>
           </div><!-- /.col -->
+
         </div><!-- /.row -->
         <hr>
       </div><!-- /.container-fluid -->
@@ -113,13 +133,13 @@ $result = gtask_detail($id,$total_img,$jml_teknisi, $teknisi_yang_dibutuhkan);
 
             <?php if($jml_teknisi == 1 && $result['type'] == 'Individu'): ?>
 
-            <img src="../assets/img/profile/<?= $result['img_teknisi']; ?>" alt="Gambar Teknisi" class="d-block mx-auto shadow mb-2" style="height: 125px; width: 125px; cursor: pointer; " onclick="$('.content-master').load('profile_teknisi.php?id=<?= $result["technician_id"]; ?>&img=<?= $result['img_teknisi']; ?>')" data-dismiss="modal">
+            <img src="../assets/img/profile/<?= $result['img_teknisi']; ?>" alt="Gambar Teknisi" class="d-block mx-auto shadow mb-2" style="height: 125px; width: 125px; cursor: pointer; " onclick="$('.content-master').load('profile_teknisi.php?id=<?= $result["technician_id"]; ?>&img=<?= $result['img_teknisi']; ?>&return=<?= $return; ?>')" data-dismiss="modal">
             <h5><?= $result['nama_teknisi'] ?></h5>
 
             <?php else: ?> 
 
             <?php for($i = 0; $i < $jml_teknisi; $i++): ?>
-            <img src="../assets/img/profile/<?= $result['img_teknisi'][$i]; ?>" alt="Gambar Teknisi" class="d-block mx-auto shadow mb-2" style="height: 125px; width: 125px; cursor: pointer;" data-dismiss="modal" onclick="$('.content-master').load('profile_teknisi.php?id=<?= $result["id_teknisi"]["$i"]; ?>&img=<?= $result["img_teknisi"][$i]; ?>')">
+            <img src="../assets/img/profile/<?= $result['img_teknisi'][$i]; ?>" alt="Gambar Teknisi" class="d-block mx-auto shadow mb-2" style="height: 125px; width: 125px; cursor: pointer;" data-dismiss="modal" onclick="$('.content-master').load('profile_teknisi.php?id=<?= $result["id_teknisi"]["$i"]; ?>&img=<?= $result["img_teknisi"][$i]; ?>&return=<?= $return; ?>')">
             <h5 class="mb-3"><?= $result['nama_teknisi'][$i]; ?></h5>
             <?php endfor; ?>
 

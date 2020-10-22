@@ -33,7 +33,7 @@ $return = "available_task.php";
               </div> <!-- /.card-header end -->
               
               <div class="card-body"> <!-- /.card-body start-->
-                <table id="data" class="table table-bordered table-striped">
+                <table id="data" class="table table-bordered table-hover">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -41,7 +41,8 @@ $return = "available_task.php";
                       <th>Lokasi</th>
                       <th>Pengaju</th>
                       <th>Tipe</th>
-                      <th>Anggota yang dibutuhkan</th>
+                      <th>Anggota</th>
+                      <th>Tanggal</th>
                       <th>Lainnya</th>
                     </tr>
                   </thead>
@@ -67,11 +68,17 @@ $return = "available_task.php";
 
                       <th><?= $record['technician_needed']; ?></th>
 
-                      <th><h5>
-                        <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>')">DETAIL</span>
+                      <th><?= $record['new_date']; ?></th>
 
-                        <span class="badge badge-success" style="cursor: pointer;" data-type="<?= $record["type"] ?>" data-member="<?= $record["member"]?>" data-active="<?= $record["active_member"] ?>" id="take" data-id="<?= $record["id_task"] ?>" data-teknisi="<?= $_SESSION["id_teknisi"]; ?>">AMBIL</span>
-                      </h5></th>
+                      <th class="d-flex justify-content-around">
+                        <h5>
+                        <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>')">DETAIL</span>
+                        </h5>
+
+                        <h5>
+                        <span class="badge badge-success" style="cursor: pointer;" data-type="<?= $record["type"] ?>" data-member="<?= $record["member"]?>" data-active="<?= $record["active_member"] ?>" id="task" data-id="<?= $record["id_task"] ?>" data-teknisi="<?= $_SESSION["id_teknisi"]; ?>">AMBIL</span>
+                        </h5>
+                    </th>
 
                     </tr>
                     <?php endforeach; ?>
@@ -93,7 +100,7 @@ $return = "available_task.php";
         "responsive": true,
         "autoWidth": false,
       });      
-      $('span[id*=take]').on('click', function(){
+      $('span[id*=task]').on('click', function(){
         var type = $(this).data('type');
         var member = $(this).data('member');
         var active = $(this).data('active');
@@ -116,7 +123,7 @@ $return = "available_task.php";
                 active : active,
                 id_teknisi: id_teknisi
               }).done(function(data){              
-                // return console.log(data);
+                // return console.log(data); // DEBUGGING
                 let response = JSON.parse(data);
                 if( 'Failed' in response ){
                     // Failed to Delete Task
@@ -130,7 +137,7 @@ $return = "available_task.php";
                       title:'Berhasil !',
                       icon:'success'
                     });
-                    ajax('available_task.php');
+                    ajax('current_task.php');
                 }
               });
 

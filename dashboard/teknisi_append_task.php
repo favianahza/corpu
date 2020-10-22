@@ -21,6 +21,7 @@ if( $type == "Individu" ){
 
 	// Updating current_task in t_teknisi
 	mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task + 1 WHERE id_teknisi = '$id_teknisi'");
+	mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = '$id_teknisi'");
 } else {
 	// Team Type
 	// Get current list of Technician ID
@@ -37,8 +38,9 @@ if( $type == "Individu" ){
 		mysqli_query($connect, $query) or die(mysqli_error($connect));
 
 
-		// Updating current_task in t_teknisi
+		// Updating current_task & total_task in t_teknisi
 		mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task + 1 WHERE id_teknisi = '$id_teknisi'");
+		mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = '$id_teknisi'");
 
 		exit(json_encode(["Success" => "Berhasil !"]));
 
@@ -51,19 +53,21 @@ if( $type == "Individu" ){
 			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '$id_teknisi"."+"."'), active_member = active_member + 1, status = 'IN PROGRESS' WHERE id_task = $IdTask";
 			mysqli_query($connect, $query) or die(mysqli_error($connect));
 
-			// Updating current_task in t_teknisi
+			// Updating current_task & total_task in t_teknisi
 			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task + 1 WHERE id_teknisi = '$id_teknisi'");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = '$id_teknisi'");
 
 			exit(json_encode(["Success" => "Berhasil !"]));
 
 		} else {
-			// Appending Technician ID and Increment Active Member in t_task
+			// Appending Technician ID and Increment Active Member in t_task and status still NOT COMPLETED
 
 			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '$id_teknisi"."+"."'), active_member = active_member + 1 WHERE id_task = $IdTask";
 			mysqli_query($connect, $query) or die(mysqli_error($connect));
 
-			// Updating current_task in t_teknisi
+			// Updating current_task & total_task in t_teknisi
 			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task + 1 WHERE id_teknisi = '$id_teknisi'");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = '$id_teknisi'");
 
 			exit(json_encode(["Success" => "Berhasil !"]));
 

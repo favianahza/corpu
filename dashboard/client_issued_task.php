@@ -30,7 +30,7 @@ $return = 'client_issued_task.php';
               </div> <!-- /.card-header end -->
               
               <div class="card-body"> <!-- /.card-body start-->
-                <table class="table table-hover text-nowrap" id="data">
+                <table class="table table-bordered table-hover" id="data">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -38,6 +38,7 @@ $return = 'client_issued_task.php';
                       <th>Lokasi</th>
                       <th>Status</th>
                       <th>Tipe</th>
+                      <th>Tanggal</th>
                       <th>Lainnya</th>
                     </tr>
                   </thead>
@@ -63,7 +64,9 @@ $return = 'client_issued_task.php';
                         <?php endif; ?>                        
                       </th>
 
-                      <th><h5>
+                      <th><?= $record['new_date']; ?></th>
+
+                      <th><h5 class="d-flex justify-content-around">
                           <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>&teknisi_yang_dibutuhkan=<?= $record['member'] ?>')">DETAIL</span> 
 
                           <span class="badge badge-danger" style="cursor: pointer;" id="hapusTask-<?= $record["id_task"] ?>" data-task="<?= $record["id_task"] ?>" data-active="<?= $record["active_member"] ?>">HAPUS</span>
@@ -118,13 +121,13 @@ $return = 'client_issued_task.php';
               id_task: IdTask,
               active_member: ActiveMember      
             }).done(function(data){      
-              // return console.log(data); //
+              // return console.log(data); // DEBUGGING
               let response = JSON.parse(data);
               if( 'Failed' in response ){
                   // Failed to Delete Task
                   Swal.fire(
                     'Gagal !',
-                    result.Failed,
+                    response.Failed,
                     'error'
                   );
               } else {

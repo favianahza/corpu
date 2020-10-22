@@ -1,9 +1,14 @@
 <?php 
-session_start();
+require_once '../functions.php';
+$records = gAll_CompletedTask($_SESSION["id_teknisi"]);
+$return = "completed_task.php";
+
+// var_dump($records); exit(); // DEBUGGING
+
  ?>
     <!-- Content Header (Page header) -->
-    <div class="content-header" data-loaded="completed_task.php">
-      <div class="container-fluid">
+    <section class="content-header" data-loaded="completed_task.php"> <!-- /.section content-header start -->
+      <div class="container-fluid"> <!-- /.container-fluid start -->
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0 text-dark">Completed Task</h1>
@@ -14,133 +19,85 @@ session_start();
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
-        
-
-        <div class="row mb-1">
-
-          <!-- Filter by Day -->
-          <div class="col">
-          <sup>Filter by Day</sup>
-            <select name="day" id="day" class="form-control">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-          </div>
-
-          <!-- Filter by Month -->          
-          <div class="col">
-          <sup>Filter by Month</sup>
-            <select name="month" id="month" class="form-control">
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </div>
-
-          <!-- Filter by Year -->
-          <div class="col">
-          <sup>Filter by Year</sup>
-            <select name="year" id="year" class="form-control">
-              <option value="2020">2020</option>
-            </select>
-          </div>
-
-        </div>
-
-
-
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+      </div><!-- /.container-fluid end -->
+    </section> <!-- /.section content-header end -->
 
     <!-- Main content -->
-    <div class="content">
+    <section class="content"> <!-- /.section content start -->
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header"> <!-- /.card-header start -->
                 <h3 class="card-title"><span class="badge badge-success">Completed Task</span></h3>
-
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap">
+              </div> <!-- /.card-header end -->
+              
+              <div class="card-body"> <!-- /.card-body start-->
+                <table id="data" class="table table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Task</th>
-                      <th>Issued By</th>
-                      <th>Status</th>
-                      <th>Other</th>
+                      <th>No.</th>
+                      <th>Taskname</th>
+                      <th>Lokasi</th>
+                      <th>Pengaju</th>
+                      <th>Tipe</th>
+                      <th>Anggota</th>
+                      <th>Tanggal</th>
+                      <th>Lainnya</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                    <?php $i = 1; ?>
+                    <?php foreach($records as $record) : ?>
+                    <tr class="task_<?= $record["id_task"]; ?>">
+                      <th><?= $i++; ?></th>
+
+                      <th><?= $record["taskname"] ?></th>
+
+                      <th><?= $record["location"] ?></th>
+
+                      <th><?= $record["pengaju"] ?></th>
+
+                      <th>
+                        <?php if($record["type"] == 'Team'):?>
+                          <i class="fas fa-user-friends"></i> <?= $record["type"] ?>
+                        <?php else: ?>
+                          <i class="fas fa-user-alt"></i> <?= $record["type"] ?>
+                        <?php endif; ?>
+                      </th>
+
+                      <th><?= $record['member']; ?></th>
+
+                      <th><?= $record['new_date']; ?></th>
+
+                      <th class="d-flex justify-content-between">
+                        <h5>
+                        <span class="badge badge-primary" style="cursor: pointer;" onclick="ajax('detail_task.php?id=<?= $record["id_task"]; ?>&total_image=<?= $record["total_img"]; ?>&jml_teknisi=<?= $record["jml_teknisi"] ?>&return=<?= $return; ?>&teknisi_yang_dibutuhkan=<?= $record['member'] ?>')">DETAIL</span>
+                        </h5>
+                        <h5>
+                        <span class="badge badge-success" style="cursor: pointer;" onclick="ajax('completed_task_report.php?return=<?= $return ?>&id=<?= $record["id_task"] ?>&total_img=<?= $record["total_img"]; ?>')">LAPORAN</span>
+                        </h5>
+                    </th>
+
                     </tr>
-                    <tr>
-                      <td>219</td>
-                      <td>Alexander Pierce</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>657</td>
-                      <td>Bob Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
-                    <tr>
-                      <td>175</td>
-                      <td>Mike Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                    </tr>
+                    <?php endforeach; ?>
                   </tbody>
                 </table>
-                <div class="card-footer clearfix">
-                  <ul class="pagination pagination-sm m-0 float-right">
-                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                  </ul>
-                </div>
-              </div>
-              <!-- /.card-body -->
+              </div> <!-- /.card-body end-->
+              
             </div>
-            <!-- /.card -->
           </div>
+          <!-- /.col -->
         </div>
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section> <!-- /.section content-header end -->
     <!-- /.content -->
+    <script>
+      $("#data").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+      });
+
+    </script>

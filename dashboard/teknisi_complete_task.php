@@ -1,12 +1,20 @@
 <?php 
-session_start();
+require_once '../functions.php';
+$id = $_GET["id"];
+$issuer_id = $_GET["issuer_id"];
+$record = gtask_by_id($id);
+
+if($record == NULL){ echo "No record found"; die(); }
+
+
  ?>
     <!-- Content Header (Page header) -->
-    <div class="content-header" data-loaded="client_create_task.php">
+    <div class="content-header" data-loaded="teknisi_complete_task.php">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col text-center">
-            <h2>Create Task</h2>
+          	<div class="col"><h5><span class="badge badge-secondary" onclick="ajax('current_task.php')" style="cursor: pointer;">Kembali ke halaman sebelumnya</span></h5></div>
+            <h2>Laporkan Penyelesaian Task</h2>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -19,40 +27,14 @@ session_start();
         <div class="row">
           <div class="col col-md-8 offset-md-2">
             <form method="post" enctype="multipart/form-data">
-
-              <div class="form-group">
-                <label for="taskName">Judul Tugas / Komplain</label>
-                <input type="text" class="form-control" id="taskName"  placeholder="Masukan Judul Tugas / Komplain Disini" required>
-              </div>
-
-              <div class="form-group">
-                <label for="lokasi">Lokasi</label>
-                <input type="text" class="form-control" id="lokasi" placeholder="Masukan Lokasi Disini" required>
-                <small class="form-text text-muted">Tulis lokasi dengan jelas!</small>
-              </div>
+            <input type="hidden" value="<?= $record["taskname"] ?>" id="taskName">
+            <input type="hidden" value="<?= $record["id_task"] ?>" id="id_task">
+            <input type="hidden" value="<?= $record["issuer_id"] ?>" id="issuer_id">
 
               <div class="form-group">
                 <label for="deskripsi">Deskripsi</label>
-                <textarea class="form-control" id="deskripsi" rows="3" placeholder="Masukan Deskripsi Disini"></textarea>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="tipe">Tipe Pekerjaan</label>
-                    <select class="form-control" id="tipe" name="tipe" required>
-                      <option value="Individu">Individu</option>
-                      <option value="Team">Team</option>
-                    </select>
-                    <small class="form-text text-muted">Pilih tipe yang sesuai untuk menentukan apakah tugas perlu diselesaikan oleh Team atau Individu.</small>
-                  </div>
-                </div>
-                <div class="col d-none" id="NumUser">
-                  <div class="form-group">
-                    <label for="member">Jumlah Anggota</label>
-                    <input class="form-control" type="number" name="member" id="member" min="0" required>
-                  </div>                  
-                </div>
+                <textarea class="form-control" id="deskripsi" rows="6" placeholder="Masukan Deskripsi Disini"></textarea>
+                <small class="form-text text-muted">Masukan deskripsi yang menjelaskan bahwa tugas telah selesai.</small>
               </div>
 
               <div class="row">
@@ -60,7 +42,7 @@ session_start();
                   <div class="form-group">
                     <label for="taskImg">Upload Foto</label>
                       <input type="file" class="form-control" id="taskImg" name="taskImg[]" multiple accept="image/*" required>
-                    <small class="form-text text-muted">Upload Foto yang menggambarkan kondisi saat ini, sebelum Teknisi datang memperbaiki / menyelesaikan komplain.</small>
+                    <small class="form-text text-muted">Upload Foto yang membuktikan bahwa tugas telah selesai.</small>
                   </div>
                 </div>
               </div>
@@ -71,7 +53,7 @@ session_start();
 
               <div class="row">
                 <div class="col text-center">
-                  <button type="button" class="btn btn-primary my-4" id="createTask">Submit</button>
+                  <button type="button" class="btn btn-primary my-4" id="reportTask">Submit</button>
                 </div>
               </div>
 
@@ -99,16 +81,10 @@ session_start();
     });
 
     // Submit Task
-    $('#createTask').on('click', function(){
+    $('#reportTask').on('click', function(){
         var form = new FormData(); // Form Data for Passing Input through Javascript
 
-        // Get Form Values
-        var taskName = $('#taskName').val();
-        var lokasi = $('#lokasi').val();
-        var deskripsi = $('#deskripsi').val();
-        var tipe = $('#tipe').val();
-
-        if( (taskName && lokasi && deskripsi) == "" ){
+        if(  $('#deskripsi').val() == "" ){
           return Swal.fire('Gagal !', 'Isi form dengan lengkap !', 'error');
         }
 
@@ -117,20 +93,14 @@ session_start();
           files[i] = $("input[type=file]").get(0).files[i];
           form.append('file'+i,files[i]);          
         }
-        form.append('taskName', taskName);
-        form.append('lokasi', lokasi);
-        form.append('deskripsi', deskripsi);
-        form.append('tipe', tipe);
-        if(tipe == "Team"){
-          form.append('member',$('#member').val());
-        } else {
-          form.append('member',1);
-        }
+        form.append('taskName', $('#taskName').val());
+        form.append('deskripsi', $('#deskripsi').val());
+        form.append('id_task', $('#id_task').val());
+        form.append('issuer_id', $('#issuer_id').val());
         form.append('submit', 'submit');
-        form.append('id_client', <?= $_SESSION['id_client']; ?>);
         // Send FormData to Backend
         $.ajax({
-            url: 'create_task_ajax.php',
+            url: 'report_completion_ajax.php',
             type: 'post',
             data: form,
             contentType: false,
@@ -145,7 +115,7 @@ session_start();
                   result.Success,
                   'success'
                 );
-                ajax('client_issued_task.php');
+                ajax('completed_task.php');
               } else if('Alert' in result ){
                 Swal.fire(
                   'Gagal !',
@@ -171,4 +141,3 @@ session_start();
         });
     })    
     </script>
-
