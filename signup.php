@@ -71,11 +71,10 @@ if( isset($_POST["signUp"]) ) {
             <form class="form-signin" method="POST">
               <h1 class="h3 mb-4 font-weight-bold" style="text-align: center;">Sign Up</h1>
                 <input type="text" id="full-name" name="fullname" class="form-control" placeholder="Full name" required="" autofocus="" autocomplete="off" required>
-                <small id="full" class="mb-3 form-text text-muted">Fullname tidak bisa digunakan untuk login! <i class="fas fa-info-circle"></i></small>
+                <small id="full" class="mb-3 form-text text-muted">Fullname tidak bisa digunakan untuk login!</small>
                 <input type="text" id="user-name" name="username" class="form-control mb-3" placeholder="Username" required autofocus="" autocomplete="off" required>
-                <input type="password" id="user-pass" name="pass" class="form-control mb-3" placeholder="Password" required autofocus="" autocomplete="off" required minlength="1">
-                <input type="password" id="user-repeatpass" name="cpass" class="form-control" placeholder="Repeat Password" required autofocus="" autocomplete="off" minlength="1">
-                <small id="pass" class="form-text text-muted">Minimal panjang password 7 karakter</small>
+                <input type="password" id="user-pass" name="pass" class="form-control mb-3" placeholder="Password" required autofocus="" autocomplete="off" required>
+                <input type="password" id="user-repeatpass" name="cpass" class="form-control" placeholder="Repeat Password" required autofocus="" autocomplete="off">
                 <select class="form-control mt-3" id="utype" name="utype" required>
                   <option disabled selected>Tipe User</option>
                   <option value="1">Client</option>
