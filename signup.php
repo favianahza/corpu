@@ -26,7 +26,7 @@ if( isset($_POST["signUp"]) ) {
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/login.css">
-    <title>Bootstrap 4 Login/Register Form</title>
+    <title>TACACS - Login / Signup</title>
 </head>
 <body>
   <!-- Loading Screen -->
@@ -70,11 +70,12 @@ if( isset($_POST["signUp"]) ) {
             <!-- SIGNUP FORM-->
             <form class="form-signin" method="POST">
               <h1 class="h3 mb-4 font-weight-bold" style="text-align: center;">Sign Up</h1>
-                <input type="text" id="full-name" name="fullname" class="form-control mb-3" placeholder="Full name" required="" autofocus="" autocomplete="off" required>
+                <input type="text" id="full-name" name="fullname" class="form-control" placeholder="Full name" required="" autofocus="" autocomplete="off" required>
+                <small id="full" class="mb-3 form-text text-muted">Fullname tidak bisa digunakan untuk login! <i class="fas fa-info-circle"></i></small>
                 <input type="text" id="user-name" name="username" class="form-control mb-3" placeholder="Username" required autofocus="" autocomplete="off" required>
                 <input type="password" id="user-pass" name="pass" class="form-control mb-3" placeholder="Password" required autofocus="" autocomplete="off" required minlength="1">
                 <input type="password" id="user-repeatpass" name="cpass" class="form-control" placeholder="Repeat Password" required autofocus="" autocomplete="off" minlength="1">
-                <small id="pass" class="form-text text-muted">Minimum Password Length is 7 Character.</small>
+                <small id="pass" class="form-text text-muted">Minimal panjang password 7 karakter</small>
                 <select class="form-control mt-3" id="utype" name="utype" required>
                   <option disabled selected>Tipe User</option>
                   <option value="1">Client</option>
@@ -88,7 +89,6 @@ if( isset($_POST["signUp"]) ) {
                 </div>
                 <button class="btn btn-primary btn-block" type="submit" name="signUp"><i class="fas fa-user-plus"></i> Sign Up</button>
                 <button  id="cancel_signup" class="btn btn-info btn-block" type="submit"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-                <button class="btn btn-primary btn-block google-btn border-danger" type="button"><span><i class="fab fa-google-plus-g"></i> Sign up with Google+</span> </button>
             </form>
             
     </div>

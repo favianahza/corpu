@@ -43,7 +43,7 @@ $result = gtask_detail($id,$total_img,$jml_teknisi, $teknisi_yang_dibutuhkan);
             <div class="row align-content-center">
               <div class="col">
                 <ol class="breadcrumb float-sm-right">
-                  <li class="breadcrumb-item active">Jumlah Anggota Saat Ini : <?= $result["active_member"] ?></li>
+                  <li class="breadcrumb-item active">Jumlah Teknisi Saat Ini : <?= $result["active_member"] ?></li>
                 </ol>
               </div>  
             </div>

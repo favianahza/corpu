@@ -106,7 +106,7 @@ if($record == NULL){ echo "No record found"; die(); }
             contentType: false,
             processData: false,
             success: function(response){
-              // return console.log(response); // FOR DEBUGGING
+              return console.log(response); // FOR DEBUGGING
               let result = JSON.parse(response);
               if( 'Success' in result ){
                 // Success create Task

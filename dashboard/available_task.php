@@ -38,10 +38,9 @@ $return = "available_task.php";
                     <tr>
                       <th>No.</th>
                       <th>Taskname</th>
-                      <th>Lokasi</th>
                       <th>Pengaju</th>
                       <th>Tipe</th>
-                      <th>Anggota</th>
+                      <th>Anggota yang dibutuhkan</th>
                       <th>Tanggal</th>
                       <th>Lainnya</th>
                     </tr>
@@ -53,8 +52,6 @@ $return = "available_task.php";
                       <th><?= $i++; ?></th>
 
                       <th><?= $record["taskname"] ?></th>
-
-                      <th><?= $record["location"] ?></th>
 
                       <th><?= $record["pengaju"] ?></th>
 

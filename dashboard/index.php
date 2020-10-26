@@ -24,7 +24,7 @@ if (isset($_SESSION["logged_in"])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Web Corpu</title>
+  <title>TACACS - Dashboard User</title>
   <link rel="stylesheet" href="../assets/bs4/css/bootstrap.css">
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
@@ -165,7 +165,28 @@ if (isset($_SESSION["logged_in"])) {
             </ul>
           </li>
 
+          <?php else: ?>
+
+          <!-- Sidebar Admin  -->
+          <li class="nav-item">
+            <a href="#Profile" class="nav-link" onclick="ajax('admin_all_technician.php');">              
+              <i class="fas fa-user-cog nav-icon"></i>
+              <p>
+                List Teknisi
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#Profile" class="nav-link" onclick="ajax('admin_all_client.php');">
+              <i class="fas fa-user-friends nav-icon"></i>
+              <p>
+                List Client
+              </p>
+            </a>
+          </li>                   
+
           <?php endif; ?>
+
           <li class="nav-item">
             <a href="#Profile" class="nav-link" onclick="ajax('profile.php');">
               <i class="nav-icon fas fa-user-circle"></i>

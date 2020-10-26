@@ -16,7 +16,7 @@ $taskDetail = mysqli_fetch_assoc(mysqli_query($connect, "SELECT * FROM t_task WH
 if( $type == "Individu" ){
 
 	// Individual Type
-	$query = "UPDATE t_task SET status = 'IN PROGRESS', technician_id = $id_teknisi, active_member = 1 WHERE id_task = $IdTask";
+	$query = "UPDATE t_task SET status = 'IN PROGRESS', technician_id = '|$id_teknisi+' , active_member = 1 WHERE id_task = $IdTask";
 	$result = mysqli_query($connect, $query) or die(mysqli_error($connect));
 
 	// Updating current_task in t_teknisi
@@ -34,7 +34,7 @@ if( $type == "Individu" ){
 	if( $list["technician_id"] == NULL ){
 		// If NULL, script will insert current Technician ID to the column for the firstime
 		
-		$query = "UPDATE t_task SET technician_id = '$id_teknisi"."+'".", active_member = active_member + 1 WHERE id_task = $IdTask";
+		$query = "UPDATE t_task SET technician_id = '|$id_teknisi+', active_member = active_member + 1 WHERE id_task = $IdTask";
 		mysqli_query($connect, $query) or die(mysqli_error($connect));
 
 
@@ -50,7 +50,7 @@ if( $type == "Individu" ){
 		if( $list['active_member'] == $list['member'] - 1  ){
 			// If this is the last time to increment Active Member, then script will set task status to IN PROGRESS
 
-			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '$id_teknisi"."+"."'), active_member = active_member + 1, status = 'IN PROGRESS' WHERE id_task = $IdTask";
+			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '|$id_teknisi+'), active_member = active_member + 1, status = 'IN PROGRESS' WHERE id_task = $IdTask";
 			mysqli_query($connect, $query) or die(mysqli_error($connect));
 
 			// Updating current_task & total_task in t_teknisi
@@ -62,7 +62,7 @@ if( $type == "Individu" ){
 		} else {
 			// Appending Technician ID and Increment Active Member in t_task and status still NOT COMPLETED
 
-			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '$id_teknisi"."+"."'), active_member = active_member + 1 WHERE id_task = $IdTask";
+			$query = "UPDATE t_task SET technician_id = CONCAT(technician_id, '|$id_teknisi+'), active_member = active_member + 1 WHERE id_task = $IdTask";
 			mysqli_query($connect, $query) or die(mysqli_error($connect));
 
 			// Updating current_task & total_task in t_teknisi

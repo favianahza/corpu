@@ -4,12 +4,16 @@ require_once '../functions.php';
 if(isset($_POST["submit"])){
 	// exit(json_encode(["Alert"=>$_POST])); // DEBUGGING
 
-	// Response with single image
+	
 	// If client not uploading 
 	(count($_FILES) == 0) ? exit(json_encode(["Alert"=>"Anda tidak mengupload gambar !"])) : True ;
 
 
-	// Uploading one file
+	// Check current task condition
+	exit(json_encode(["Alert"=>"NAHA"]));
+
+
+	// Uploading one file / Response with single image
 	if(count($_FILES) == 1) {
 		$file_name = $_FILES["file0"]["name"];
 		$tmp_name = $_FILES["file0"]["tmp_name"];
@@ -62,9 +66,26 @@ if(isset($_POST["submit"])){
 		// Insert Task Image
 		$result = mysqli_query($connect, "INSERT INTO `t_response_img` VALUES('', '$newfile', '$response_id')") or die(mysqli_error($connect)); 
 
-		// Update Technician Current & Completed Task in t_teknisi
-		mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $id_teknisi");
-		mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $id_teknisi");
+		// Get list of Technician ID
+		$list_id = mysqli_fetch_assoc(mysqli_query($connect, "SELECT technician_id FROM t_task WHERE id_task = $id_task"))["technician_id"];
+		$list_id = array_filter(explode('+', str_replace('|', '', $list_id)));
+
+
+		if( count($list_id) == 1 ){
+
+			// Update Technician Current & Completed Task in t_teknisi
+			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $list_id[0]");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $list_id[0]");
+
+		} else {
+
+			// Update All Technician Current & Completed Task in t_teknisi
+			for( $i = 0; $i < count($list_id); $i++ ){
+			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $list_id[$i]");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $list_id[$i]");	
+			}
+			
+		}
 
 		// Update Client current Issued Task and Completed Issued Task
 		mysqli_query($connect, "UPDATE t_client SET issued_task = issued_task - 1, completed_issued_task = completed_issued_task + 1 WHERE t_user_id = $issuer_id");
@@ -72,7 +93,7 @@ if(isset($_POST["submit"])){
 		// Finally update t_task status to COMPLETED
 		mysqli_query($connect, "UPDATE t_task SET status = 'COMPLETED' WHERE id_task = $id_task");
 
-		exit(json_encode(["Success"=>"Berhasil membuat laporan !"]));
+		exit(json_encode(["Success"=>"Berhasil membuat Laporan !"]));
 
 	}
 
@@ -141,9 +162,26 @@ if(isset($_POST["submit"])){
 			mysqli_query($connect, "INSERT INTO `t_response_img` VALUES('', '$newfile[$i]', $response_id)") or die(mysqli_error($connect));
 
 		}
-		// Update Technician Current & Completed Task in t_teknisi
-		mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $id_teknisi");
-		mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $id_teknisi");
+		// Get list of Technician ID
+		$list_id = mysqli_fetch_assoc(mysqli_query($connect, "SELECT technician_id FROM t_task WHERE id_task = $id_task"))["technician_id"];
+		$list_id = array_filter(explode('+', str_replace('|', '', $list_id)));
+
+
+		if( count($list_id) == 1 ){
+
+			// Update Technician Current & Completed Task in t_teknisi
+			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $list_id[0]");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $list_id[0]");
+
+		} else {
+
+			// Update All Technician Current & Completed Task in t_teknisi
+			for( $i = 0; $i < count($list_id); $i++ ){
+			mysqli_query($connect, "UPDATE t_teknisi SET current_task = current_task - 1, completed_task = completed_task + 1 WHERE id_teknisi = $list_id[$i]");
+			mysqli_query($connect, "UPDATE t_teknisi SET total_task = current_task + completed_task WHERE id_teknisi = $list_id[$i]");	
+			}
+			
+		}
 
 		// Update Client current Issued Task and Completed Issued Task
 		mysqli_query($connect, "UPDATE t_client SET issued_task = issued_task - 1, completed_issued_task = completed_issued_task + 1 WHERE t_user_id = $issuer_id");
@@ -151,7 +189,7 @@ if(isset($_POST["submit"])){
 		// Finally update t_task status to COMPLETED
 		mysqli_query($connect, "UPDATE t_task SET status = 'COMPLETED' WHERE id_task = $id_task");
 
-		exit(json_encode(["Success"=>"Berhasil membuat Task !"]));
+		exit(json_encode(["Success"=>"Berhasil membuat Laporan !"]));
 
 	}
 

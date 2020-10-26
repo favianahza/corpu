@@ -1,11 +1,13 @@
 DELETE FROM t_task;
 DELETE FROM t_user;
+DELETE FROM t_response;
 ALTER TABLE t_user AUTO_INCREMENT = 1;
 ALTER TABLE t_client AUTO_INCREMENT = 1;
 ALTER TABLE t_teknisi AUTO_INCREMENT = 1;
 ALTER TABLE t_task AUTO_INCREMENT = 1;
 ALTER TABLE t_task_img AUTO_INCREMENT = 1;
-
+ALTER TABLE t_response AUTO_INCREMENT = 1;
+ALTER TABLE t_response_img AUTO_INCREMENT = 1;
 
 (SELECT COUNT(img_name) FROM t_task_img WHERE t_task_img.id_task = t_task.id_task) AS total_img, ROUND(CHAR_LENGTH(technician_id)/2) AS jml_teknisi
 

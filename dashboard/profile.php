@@ -96,7 +96,7 @@ require_once '../functions.php';
 
                     <div class="col-12">
                       <div class="info-box mb-3">
-                        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-envelope-open-text"></i></span>
 
                         <div class="info-box-content">
                           <span class="info-box-text">Issued Task</span>
@@ -113,7 +113,7 @@ require_once '../functions.php';
 
                     <div class="col-12">
                       <div class="info-box mb-3">
-                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+                        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check-circle"></i></span>
 
                         <div class="info-box-content">
                           <span class="info-box-text">Completed Task</span>

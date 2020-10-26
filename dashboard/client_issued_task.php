@@ -108,7 +108,7 @@ $return = 'client_issued_task.php';
 
       Swal.fire({
         title: 'Yakin Dihapus ?',
-        text: "Data tidak bisa dikembalikan lagi setelah dihapus !"+IdTask,
+        text: "Data tidak bisa dikembalikan lagi setelah dihapus !",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',

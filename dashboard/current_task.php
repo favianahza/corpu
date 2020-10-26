@@ -119,7 +119,7 @@ $return = "current_task.php";
                 active : $(this).data('active'),
                 id_teknisi: $(this).data('teknisi')
               }).done(function(data){              
-                return console.log(data); // DEBUGGING
+                // return console.log(data); // DEBUGGING
                 let response = JSON.parse(data);
                 if( 'Failed' in response ){
                     // Failed to Delete Task

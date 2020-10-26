@@ -19,7 +19,7 @@
 			 url: content,
     		 type: 'GET',
 			 beforeSend: function(){			 	
-			 	$('#CONTENT').append('<div id="content-loader-wrapper">WOWOWOWO</div>');
+			 	$('#CONTENT').append('<div id="content-loader-wrapper"></div>');
  			 }, 			
 			 success: function(response){
 			 	$('#CONTENT').fadeOut(200, function() {			 		
